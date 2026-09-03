@@ -21,57 +21,23 @@
     <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <style>
         :root {
-            --cor-primaria: #1e3a8a;
-            --cor-primaria-light: #3b82f6;
-            --cor-secundaria: #f59e0b;
-            --cor-fundo: #f8fafc;
-            --cor-card: #ffffff;
-            --cor-texto: #1e293b;
-            --cor-texto-claro: #64748b;
-            --cor-borda: #e2e8f0;
-            --cor-sucesso: #10b981;
-            --cor-perigo: #ef4444;
-            --cor-info: #3b82f6;
-            --cor-ceara: #8b5cf6;
-            --cor-brasil: #f59e0b;
-            
-            --nivel-abaixo: #FF4136;
-            --nivel-basico: #FF851B;
-            --nivel-proficiente: #B0E57C;
-            --nivel-avancado: #006400;
+            --cor-primaria: #1e3a8a; --cor-primaria-light: #3b82f6; --cor-secundaria: #f59e0b;
+            --cor-fundo: #f8fafc; --cor-card: #ffffff; --cor-texto: #1e293b; --cor-texto-claro: #64748b;
+            --cor-borda: #e2e8f0; --cor-sucesso: #10b981; --cor-perigo: #ef4444; --cor-info: #3b82f6;
+            --cor-ceara: #8b5cf6; --cor-brasil: #f59e0b;
+            --nivel-abaixo: #FF4136; --nivel-basico: #FF851B; --nivel-proficiente: #B0E57C; --nivel-avancado: #006400;
         }
-        
         * { box-sizing: border-box; }
         body { background: var(--cor-fundo); font-family: 'Inter', sans-serif; color: var(--cor-texto); min-height: 100vh; }
         
-        .sidebar {
-            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-            border-right: 1px solid var(--cor-borda);
-            min-height: 100vh;
-            position: sticky;
-            top: 0;
-            padding: 28px 22px;
-            overflow-y: auto;
-            box-shadow: 0 0 30px rgba(0,0,0,0.04);
-        }
+        .sidebar { background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); border-right: 1px solid var(--cor-borda); min-height: 100vh; position: sticky; top: 0; padding: 28px 22px; overflow-y: auto; box-shadow: 0 0 30px rgba(0,0,0,0.04); }
         .sidebar .logo-container { text-align: center; margin-bottom: 24px; }
         .main-content { padding: 36px 40px; }
         
-        .card-edicao {
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            background: var(--cor-card);
-            padding: 24px;
-            margin-bottom: 24px;
-            border: 1px solid var(--cor-borda);
-            transition: all 0.3s ease;
-        }
+        .card-edicao { border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); background: var(--cor-card); padding: 24px; margin-bottom: 24px; border: 1px solid var(--cor-borda); transition: all 0.3s ease; }
         .card-edicao:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); transform: translateY(-2px); }
         
-        .card-aprendizagem {
-            border-radius: 14px; padding: 18px 20px; text-align: center; min-width: 180px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-        }
+        .card-aprendizagem { border-radius: 14px; padding: 18px 20px; text-align: center; min-width: 180px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
         .card-aprendizagem h6 { font-size: 0.75rem; margin-bottom: 6px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.8px; }
         .card-aprendizagem .valor { font-size: 2.6rem; font-weight: 800; margin: 0; line-height: 1; }
         
@@ -168,11 +134,7 @@
         .link-estudo:hover { background: #eff6ff; border-color: var(--cor-primaria-light); color: var(--cor-primaria); }
         .link-estudo i { font-size: 1.5rem; color: var(--cor-perigo); }
         
-        @media (max-width: 768px) {
-            .main-content { padding: 20px 16px; }
-            .page-title { font-size: 1.6rem; }
-            .grafico-wrapper-vertical { height: 400px; }
-        }
+        @media (max-width: 768px) { .main-content { padding: 20px 16px; } .page-title { font-size: 1.6rem; } .grafico-wrapper-vertical { height: 400px; } }
     </style>
 </head>
 <body>
@@ -183,18 +145,11 @@
         <div class="col-md-4 col-lg-3 sidebar" id="sidebar">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="fw-bold text-primary small" style="letter-spacing: 1px;">PAINEL DE CONTROLE</span>
-                <button class="btn btn-sm btn-light border" id="btnToggleSidebarInside" title="Recolher Menu">
-                    <i class="bi bi-list"></i>
-                </button>
+                <button class="btn btn-sm btn-light border" id="btnToggleSidebarInside" title="Recolher Menu"><i class="bi bi-list"></i></button>
             </div>
             <div class="logo-container">
                 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="70" viewBox="0 0 220 75">
-                    <defs>
-                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
+                    <defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" /></linearGradient></defs>
                     <rect width="220" height="75" rx="12" fill="url(#logoGrad)"/>
                     <text x="20" y="35" font-family="Inter, sans-serif" font-size="18" fill="#ffffff" font-weight="800">ANÁLISE SAEB</text>
                     <text x="20" y="55" font-family="Inter, sans-serif" font-size="11" fill="#93c5fd" font-weight="500">3º ANO DO ENSINO MÉDIO</text>
@@ -210,7 +165,7 @@
 
                 <label class="select-label">Etapa</label>
                 <select id="etapaSelect" class="form-select shadow-sm" disabled>
-                    <option value="3ª Série do Ensino Médio">3ª Série do Ensino Médio</option>
+                    <option value="3º ANO EM">3º ANO EM</option>
                 </select>
 
                 <label class="select-label">Componente Curricular</label>
@@ -224,31 +179,17 @@
             <hr class="text-muted my-3" />
             <div class="legend-box">
                 <strong class="text-dark d-block mb-2" style="font-size: 0.85rem;">LEGENDA DOS NÍVEIS:</strong>
-                <div class="legend-item">
-                    <div class="legend-dot" style="background: var(--nivel-abaixo);"></div>
-                    <span>Abaixo do Básico</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-dot" style="background: var(--nivel-basico);"></div>
-                    <span>Básico</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-dot" style="background: var(--nivel-proficiente);"></div>
-                    <span>Proficiente</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-dot" style="background: var(--nivel-avancado);"></div>
-                    <span>Avançado</span>
-                </div>
+                <div class="legend-item"><div class="legend-dot" style="background: var(--nivel-abaixo);"></div><span>Abaixo do Básico</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background: var(--nivel-basico);"></div><span>Básico</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background: var(--nivel-proficiente);"></div><span>Proficiente</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background: var(--nivel-avancado);"></div><span>Avançado</span></div>
             </div>
         </div>
 
         <!-- CONTEÚDO PRINCIPAL -->
         <div class="col-md-12 col-lg-9 main-content" id="mainContent">
             <div class="mb-3">
-                <button class="btn btn-primary shadow-sm" id="btnToggleSidebar" title="Alternar Menu Lateral">
-                    <i class="bi bi-list fs-5"></i> Menu / Filtros
-                </button>
+                <button class="btn btn-primary shadow-sm" id="btnToggleSidebar" title="Alternar Menu Lateral"><i class="bi bi-list fs-5"></i> Menu / Filtros</button>
             </div>
 
             <div id="pdfHeaderBox" class="pdf-header-print">
@@ -267,35 +208,16 @@
             <div id="placeholder" class="loading-box">
                 <div class="spinner-border text-primary mb-2" role="status"></div>
                 <div>Lendo base de dados local (`Pasta_3.xlsx`), por favor aguarde...</div>
+                <small class="text-muted mt-2 d-block">Certifique-se de usar um servidor local (ex: Live Server do VS Code).</small>
             </div>
 
             <!-- Abas -->
             <ul class="nav nav-tabs" id="myTab" role="tablist" style="display:none;">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="desempenho-tab" data-bs-toggle="tab" data-bs-target="#desempenho" type="button" role="tab">
-                        <i class="bi bi-bar-chart-fill me-1"></i> Desempenho por Edição
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="distribuicao-tab" data-bs-toggle="tab" data-bs-target="#distribuicao" type="button" role="tab">
-                        <i class="bi bi-bar-chart-steps me-1"></i> Distribuição por Níveis
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="evolucao-tab" data-bs-toggle="tab" data-bs-target="#evolucao" type="button" role="tab">
-                        <i class="bi bi-graph-up me-1"></i> Evolução Histórica
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="comparacao-tab" data-bs-toggle="tab" data-bs-target="#comparacao" type="button" role="tab">
-                        <i class="bi bi-arrow-left-right me-1"></i> Comparação Temporal
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="metodologia-tab" data-bs-toggle="tab" data-bs-target="#metodologia" type="button" role="tab">
-                        <i class="bi bi-book me-1"></i> Metodologia de Estudo
-                    </button>
-                </li>
+                <li class="nav-item" role="presentation"><button class="nav-link active" id="desempenho-tab" data-bs-toggle="tab" data-bs-target="#desempenho" type="button" role="tab"><i class="bi bi-bar-chart-fill me-1"></i> Desempenho por Edição</button></li>
+                <li class="nav-item" role="presentation"><button class="nav-link" id="distribuicao-tab" data-bs-toggle="tab" data-bs-target="#distribuicao" type="button" role="tab"><i class="bi bi-bar-chart-steps me-1"></i> Distribuição por Níveis</button></li>
+                <li class="nav-item" role="presentation"><button class="nav-link" id="evolucao-tab" data-bs-toggle="tab" data-bs-target="#evolucao" type="button" role="tab"><i class="bi bi-graph-up me-1"></i> Evolução Histórica</button></li>
+                <li class="nav-item" role="presentation"><button class="nav-link" id="comparacao-tab" data-bs-toggle="tab" data-bs-target="#comparacao" type="button" role="tab"><i class="bi bi-arrow-left-right me-1"></i> Comparação Temporal</button></li>
+                <li class="nav-item" role="presentation"><button class="nav-link" id="metodologia-tab" data-bs-toggle="tab" data-bs-target="#metodologia" type="button" role="tab"><i class="bi bi-book me-1"></i> Metodologia de Estudo</button></li>
             </ul>
 
             <div class="tab-content" id="myTabContent" style="display:none;">
@@ -307,20 +229,13 @@
                     <div class="card-edicao">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                             <div>
-                                <h5 class="mb-1 fw-bold">
-                                    <i class="bi bi-bar-chart-steps text-primary me-2"></i>
-                                    Distribuição Detalhada por Nível (0 a 10)
-                                </h5>
+                                <h5 class="mb-1 fw-bold"><i class="bi bi-bar-chart-steps text-primary me-2"></i>Distribuição Detalhada por Nível (0 a 10)</h5>
                                 <small class="text-muted">Percentual de alunos em cada nível de proficiência para cada edição (barras agrupadas)</small>
                             </div>
-                            <button id="btnBaixarDistribuicao" class="btn btn-outline-success fw-semibold">
-                                <i class="bi bi-download"></i> Baixar Gráfico PNG
-                            </button>
+                            <button id="btnBaixarDistribuicao" class="btn btn-outline-success fw-semibold"><i class="bi bi-download"></i> Baixar Gráfico PNG</button>
                         </div>
                         <div class="paleta-niveis" id="paletaNiveis"></div>
-                        <div class="grafico-wrapper-vertical mt-3">
-                            <canvas id="graficoDistribuicao"></canvas>
-                        </div>
+                        <div class="grafico-wrapper-vertical mt-3"><canvas id="graficoDistribuicao"></canvas></div>
                     </div>
                 </div>
 
@@ -329,23 +244,16 @@
                     <div class="card-edicao">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                             <div>
-                                <h5 class="mb-1 fw-bold">
-                                    <i class="bi bi-graph-up-arrow text-primary me-2"></i>
-                                    Evolução Histórica da Aprendizagem Adequada (%)
-                                </h5>
+                                <h5 class="mb-1 fw-bold"><i class="bi bi-graph-up-arrow text-primary me-2"></i>Evolução Histórica da Aprendizagem Adequada (%)</h5>
                                 <small class="text-muted">Comparativo entre a escola selecionada, o Estado do Ceará e o Brasil</small>
                             </div>
-                            <button id="btnBaixarEvolucao" class="btn btn-outline-success fw-semibold">
-                                <i class="bi bi-download"></i> Baixar Gráfico PNG
-                            </button>
+                            <button id="btnBaixarEvolucao" class="btn btn-outline-success fw-semibold"><i class="bi bi-download"></i> Baixar Gráfico PNG</button>
                         </div>
                         <div class="info-box comparativo">
                             <i class="bi bi-info-circle-fill me-2"></i>
                             <strong>Comparativo de Referência:</strong> O gráfico exibe a trajetória da escola selecionada em comparação direta com as médias do <strong>Estado do Ceará</strong> (linha roxa tracejada) e do <strong>Brasil</strong> (linha laranja pontilhada).
                         </div>
-                        <div style="height:450px;">
-                            <canvas id="graficoEvolucao"></canvas>
-                        </div>
+                        <div style="height:450px;"><canvas id="graficoEvolucao"></canvas></div>
                     </div>
                 </div>
 
@@ -354,15 +262,10 @@
                     <div class="card-edicao">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                             <div>
-                                <h5 class="mb-1 fw-bold">
-                                    <i class="bi bi-arrow-left-right text-primary me-2"></i>
-                                    Comparação Temporal da Aprendizagem Adequada
-                                </h5>
+                                <h5 class="mb-1 fw-bold"><i class="bi bi-arrow-left-right text-primary me-2"></i>Comparação Temporal da Aprendizagem Adequada</h5>
                                 <small class="text-muted">Análise de crescimento, recuo ou estabilidade entre edições consecutivas</small>
                             </div>
-                            <button id="btnBaixarComparacao" class="btn btn-outline-success fw-semibold">
-                                <i class="bi bi-download"></i> Baixar Comparação PNG
-                            </button>
+                            <button id="btnBaixarComparacao" class="btn btn-outline-success fw-semibold"><i class="bi bi-download"></i> Baixar Comparação PNG</button>
                         </div>
                         <div id="containerComparacao"></div>
                     </div>
@@ -372,135 +275,52 @@
                 <div class="tab-pane fade" id="metodologia" role="tabpanel">
                     <div class="card-edicao">
                         <h5 class="mb-4 fw-bold"><i class="bi bi-book-half text-primary me-2"></i>Metodologia de Classificação e Estudo (3º Ano do Ensino Médio)</h5>
-                        
                         <div class="row g-4">
                             <div class="col-lg-6">
                                 <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">Língua Portuguesa (Leitura)</h6>
                                 <table class="table table-bordered metodologia-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Padrão Qualitativo</th>
-                                            <th>Níveis da Régua SAEB</th>
-                                            <th>Intervalo de Pontuação</th>
-                                        </tr>
-                                    </thead>
+                                    <thead><tr><th>Padrão Qualitativo</th><th>Níveis da Régua SAEB</th><th>Intervalo de Pontuação</th></tr></thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-start" style="color: var(--nivel-abaixo);">Abaixo do Básico</td>
-                                            <td>Nível 0 + 1 + 2 + 3 + 4</td>
-                                            <td>Menor que 275 pontos</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-start" style="color: var(--nivel-basico);">Básico</td>
-                                            <td>Nível 5</td>
-                                            <td>De 275 a 299 pontos</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-start" style="color: var(--nivel-proficiente);">Proficiente</td>
-                                            <td>Nível 6 + 7</td>
-                                            <td>De 300 a 349 pontos</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-start" style="color: var(--nivel-avancado);">Avançado</td>
-                                            <td>Nível 8 ou mais</td>
-                                            <td>350 pontos ou mais</td>
-                                        </tr>
-                                        <tr class="table-primary">
-                                            <td class="text-start fw-bold">APRENDIZADO ADEQUADO</td>
-                                            <td class="fw-bold">Soma dos Níveis 6, 7, 8+</td>
-                                            <td class="fw-bold">300 pontos ou mais</td>
-                                        </tr>
+                                        <tr><td class="text-start" style="color: var(--nivel-abaixo);">Abaixo do Básico</td><td>Nível 0 + 1 + 2 + 3 + 4</td><td>Menor que 275 pontos</td></tr>
+                                        <tr><td class="text-start" style="color: var(--nivel-basico);">Básico</td><td>Nível 5</td><td>De 275 a 299 pontos</td></tr>
+                                        <tr><td class="text-start" style="color: var(--nivel-proficiente);">Proficiente</td><td>Nível 6 + 7</td><td>De 300 a 349 pontos</td></tr>
+                                        <tr><td class="text-start" style="color: var(--nivel-avancado);">Avançado</td><td>Nível 8 ou mais</td><td>350 pontos ou mais</td></tr>
+                                        <tr class="table-primary"><td class="text-start fw-bold">APRENDIZADO ADEQUADO</td><td class="fw-bold">Soma dos Níveis 6, 7, 8+</td><td class="fw-bold">300 pontos ou mais</td></tr>
                                     </tbody>
                                 </table>
                             </div>
-                            
                             <div class="col-lg-6">
                                 <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">Matemática</h6>
                                 <table class="table table-bordered metodologia-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Padrão Qualitativo</th>
-                                            <th>Níveis da Régua SAEB</th>
-                                            <th>Intervalo de Pontuação</th>
-                                        </tr>
-                                    </thead>
+                                    <thead><tr><th>Padrão Qualitativo</th><th>Níveis da Régua SAEB</th><th>Intervalo de Pontuação</th></tr></thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-start" style="color: var(--nivel-abaixo);">Abaixo do Básico</td>
-                                            <td>Nível 0 + 1 + 2 + 3 + 4 + 5</td>
-                                            <td>Menor que 275 pontos</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-start" style="color: var(--nivel-basico);">Básico</td>
-                                            <td>Nível 6 + 7 + 8</td>
-                                            <td>De 275 a 349 pontos</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-start" style="color: var(--nivel-proficiente);">Proficiente</td>
-                                            <td>Nível 9</td>
-                                            <td>De 350 a 374 pontos</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-start" style="color: var(--nivel-avancado);">Avançado</td>
-                                            <td>Nível 10 ou mais</td>
-                                            <td>375 pontos ou mais</td>
-                                        </tr>
-                                        <tr class="table-primary">
-                                            <td class="text-start fw-bold">APRENDIZADO ADEQUADO</td>
-                                            <td class="fw-bold">Soma dos Níveis 9 e 10+</td>
-                                            <td class="fw-bold">350 pontos ou mais</td>
-                                        </tr>
+                                        <tr><td class="text-start" style="color: var(--nivel-abaixo);">Abaixo do Básico</td><td>Nível 0 + 1 + 2 + 3 + 4 + 5</td><td>Menor que 275 pontos</td></tr>
+                                        <tr><td class="text-start" style="color: var(--nivel-basico);">Básico</td><td>Nível 6 + 7 + 8</td><td>De 275 a 349 pontos</td></tr>
+                                        <tr><td class="text-start" style="color: var(--nivel-proficiente);">Proficiente</td><td>Nível 9</td><td>De 350 a 374 pontos</td></tr>
+                                        <tr><td class="text-start" style="color: var(--nivel-avancado);">Avançado</td><td>Nível 10 ou mais</td><td>375 pontos ou mais</td></tr>
+                                        <tr class="table-primary"><td class="text-start fw-bold">APRENDIZADO ADEQUADO</td><td class="fw-bold">Soma dos Níveis 9 e 10+</td><td class="fw-bold">350 pontos ou mais</td></tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                         <hr class="my-4" />
-                        
                         <h6 class="fw-bold text-primary mb-3"><i class="bi bi-link-45deg me-2"></i>Material de Apoio e Estudos</h6>
                         <div class="row">
                             <div class="col-md-6">
-                                <a href="#" class="link-estudo" target="_blank">
-                                    <i class="bi bi-file-earmark-pdf-fill"></i>
-                                    <div>
-                                        <div class="fw-bold">Escalas de Proficiência do SAEB (INEP)</div>
-                                        <small class="text-muted">Documento oficial com a descrição detalhada de cada nível.</small>
-                                    </div>
-                                </a>
-                                <a href="#" class="link-estudo" target="_blank">
-                                    <i class="bi bi-file-earmark-pdf-fill"></i>
-                                    <div>
-                                        <div class="fw-bold">Boletim Pedagógico - Língua Portuguesa</div>
-                                        <small class="text-muted">Análise qualitativa dos resultados de LP no Ensino Médio.</small>
-                                    </div>
+                                <a href="https://www.gov.br/inep/pt-br/centrais-de-conteudo/acervo-linha-editorial/publicacoes-institucionais/avaliacoes-e-exames-da-educacao-basica/escalas-de-proficiencia-do-saeb" class="link-estudo" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf-fill"></i><div><div class="fw-bold">Escalas de Proficiência do SAEB (INEP)</div><small class="text-muted">Documento oficial com a descrição detalhada de cada nível.</small></div>
                                 </a>
                             </div>
                             <div class="col-md-6">
-                                <a href="#" class="link-estudo" target="_blank">
-                                    <i class="bi bi-file-earmark-pdf-fill"></i>
-                                    <div>
-                                        <div class="fw-bold">Boletim Pedagógico - Matemática</div>
-                                        <small class="text-muted">Análise qualitativa dos resultados de MT no Ensino Médio.</small>
-                                    </div>
-                                </a>
-                                <a href="#" class="link-estudo" target="_blank">
-                                    <i class="bi bi-globe"></i>
-                                    <div>
-                                        <div class="fw-bold">Portal QEdu - Análise de Dados</div>
-                                        <small class="text-muted">Ferramenta externa para benchmarking e estudos comparativos.</small>
-                                    </div>
+                                <a href="https://qedu.org.br/" class="link-estudo" target="_blank">
+                                    <i class="bi bi-globe"></i><div><div class="fw-bold">Portal QEdu - Análise de Dados</div><small class="text-muted">Ferramenta externa para benchmarking e estudos comparativos.</small></div>
                                 </a>
                             </div>
-                        </div>
-                        <div class="alert alert-info mt-3 mb-0">
-                            <i class="bi bi-info-circle-fill me-2"></i>
-                            <strong>Nota para o Administrador:</strong> Para adicionar novos links ou textos, edite a seção "Material de Apoio e Estudos" diretamente no código HTML desta aba.
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tipos de Aprendizado -->
             <div class="learning-types-card">
                 <h5><i class="bi bi-lightbulb-fill text-warning me-2"></i>Tipos de Aprendizado</h5>
                 <ul class="list-unstyled mb-2">
@@ -509,18 +329,15 @@
                     <li><strong>Básico:</strong> Os alunos precisam melhorar. Sugere-se atividades de reforço.</li>
                     <li><strong>Abaixo do Básico:</strong> Apresentaram pouquíssimo aprendizado. É necessária a recuperação de conteúdos.</li>
                 </ul>
-                <p class="text-muted small mb-0">Fonte: <a href="https://qedu.org.br/" target="_blank" class="text-decoration-none">https://qedu.org.br/</a> – INEP, 2023.</p>
+                <p class="text-muted small mb-0">Fonte: INEP, 2023.</p>
             </div>
 
-            <footer class="footer">
-                © 2026 Desenvolvido para análise pedagógica – Dados INEP / QEdu
-            </footer>
+            <footer class="footer">© 2026 Desenvolvido para análise pedagógica – Dados INEP</footer>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
     let dados = [];
     let escolasMap = new Map();
@@ -530,18 +347,10 @@
     let graficoDistribuicao = null;
 
     const CAMINHO_ARQUIVO = "Pasta_3.xlsx";
-
     Chart.register(ChartDataLabels);
 
-    const CORES_NIVEIS = {
-        0:  '#9e0142', 1:  '#d53e4f', 2:  '#f46d43', 3:  '#fdae61', 4:  '#fee08b',
-        5:  '#ffffbf', 6:  '#d9ef8b', 7:  '#a6d96a', 8:  '#66bd63', 9:  '#1a9850', 10: '#006837'
-    };
-    
-    const TEXTOS_NIVEIS = {
-        0: 'white', 1: 'white', 2: 'black', 3: 'black', 4: 'black',
-        5: 'black', 6: 'black', 7: 'black', 8: 'white', 9: 'white', 10: 'white'
-    };
+    const CORES_NIVEIS = { 0: '#9e0142', 1: '#d53e4f', 2: '#f46d43', 3: '#fdae61', 4: '#fee08b', 5: '#ffffbf', 6: '#d9ef8b', 7: '#a6d96a', 8: '#66bd63', 9: '#1a9850', 10: '#006837' };
+    const TEXTOS_NIVEIS = { 0: 'white', 1: 'white', 2: 'black', 3: 'black', 4: 'black', 5: 'black', 6: 'black', 7: 'black', 8: 'white', 9: 'white', 10: 'white' };
 
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
@@ -554,65 +363,34 @@
             mainContent.className = "col-md-12 col-lg-12 main-content";
         }
     }
-
     document.getElementById('btnToggleSidebar').addEventListener('click', toggleSidebar);
     document.getElementById('btnToggleSidebarInside').addEventListener('click', toggleSidebar);
-
-    function extrairNumeroEtapa(etapaStr) {
-        if (!etapaStr) return null;
-        const m = String(etapaStr).match(/\d+/);
-        return m ? parseInt(m[0], 10) : null;
-    }
 
     function mapComponente(nomeCompleto) {
         if (!nomeCompleto) return "";
         const up = String(nomeCompleto).trim().toUpperCase();
-        if (up === "LÍNGUA PORTUGUESA" || up === "LP") return "LP";
-        if (up === "MATEMÁTICA" || up === "MT") return "MT";
-        return nomeCompleto;
+        if (up.includes("LÍNGUA") || up.includes("PORTUGUESA") || up === "LP") return "LP";
+        if (up.includes("MATEMÁTICA") || up.includes("MATEMATICA") || up === "MT") return "MT";
+        return "";
     }
 
     // ========================================================================
-    // LÓGICA EXCLUSIVA DE AGRUPAMENTO (ENSINO MÉDIO - 3º ANO)
+    // LÓGICA EXCLUSIVA DE AGRUPAMENTO (APENAS 3º ANO EM)
     // ========================================================================
-    function agruparNiveis(etapa, componente, valores) {
+    function agruparNiveis(componente, valores) {
         let grupos = {};
         const comp = mapComponente(componente);
 
-        // Lógica estrita para o 3º Ano do Ensino Médio
         if (comp === "LP") {
-            grupos = {
-                'ABAIXO DO BÁSICO': [0, 1, 2, 3, 4],
-                'BÁSICO': [5],
-                'PROFICIENTE': [6, 7],
-                'AVANÇADO': [8, 9, 10]
-            };
+            grupos = { 'ABAIXO DO BÁSICO': [0, 1, 2, 3, 4], 'BÁSICO': [5], 'PROFICIENTE': [6, 7], 'AVANÇADO': [8, 9, 10] };
         } else if (comp === "MT") {
-            grupos = {
-                'ABAIXO DO BÁSICO': [0, 1, 2, 3, 4, 5],
-                'BÁSICO': [6, 7, 8],
-                'PROFICIENTE': [9],
-                'AVANÇADO': [10]
-            };
+            grupos = { 'ABAIXO DO BÁSICO': [0, 1, 2, 3, 4, 5], 'BÁSICO': [6, 7, 8], 'PROFICIENTE': [9], 'AVANÇADO': [10] };
         } else {
-            // Fallback genérico para 3º EM caso de componente não identificado
             grupos = {'ABAIXO DO BÁSICO': [0,1,2,3,4], 'BÁSICO':[5], 'PROFICIENTE':[6,7], 'AVANÇADO':[8,9,10]};
         }
 
-        const cores = {
-            'ABAIXO DO BÁSICO': '#FF4136',
-            'BÁSICO': '#FF851B',
-            'PROFICIENTE': '#B0E57C',
-            'AVANÇADO': '#006400'
-        };
-        
-        const textColors = {
-            'ABAIXO DO BÁSICO': 'white',
-            'BÁSICO': 'black',
-            'PROFICIENTE': 'black',
-            'AVANÇADO': 'white'
-        };
-
+        const cores = { 'ABAIXO DO BÁSICO': '#FF4136', 'BÁSICO': '#FF851B', 'PROFICIENTE': '#B0E57C', 'AVANÇADO': '#006400' };
+        const textColors = { 'ABAIXO DO BÁSICO': 'white', 'BÁSICO': 'black', 'PROFICIENTE': 'black', 'AVANÇADO': 'white' };
         const categorias = [], valoresCategorias = [], coresList = [], textColorsList = [];
 
         for (let cat in grupos) {
@@ -626,7 +404,6 @@
             coresList.push(cores[cat] || '#888888');
             textColorsList.push(textColors[cat] || 'black');
         }
-
         return { categorias, valoresCategorias, cores: coresList, textColors: textColorsList };
     }
 
@@ -637,26 +414,8 @@
         return { bg: "#006400", text: "white" };
     }
 
-    function carregarArquivoLocal() {
-        fetch(CAMINHO_ARQUIVO)
-            .then(response => {
-                if (!response.ok) throw new Error("Arquivo não encontrado na pasta local.");
-                return response.arrayBuffer();
-            })
-            .then(buffer => {
-                const workbook = XLSX.read(new Uint8Array(buffer), { type: 'array' });
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const rawData = XLSX.utils.sheet_to_json(worksheet);
-                
-                if (rawData.length === 0) throw new Error("O arquivo está vazio.");
-                processarDados(rawData);
-            })
-            .catch(err => {
-                document.getElementById('statusMsg').innerHTML = `<span class="text-danger">❌ Erro: ${err.message}</span>`;
-                document.getElementById('statusMsg').className = 'status-msg error';
-                document.getElementById('placeholder').innerHTML = `<div class="alert alert-danger">Erro ao carregar '${CAMINHO_ARQUIVO}'. Coloque-o na mesma pasta do arquivo HTML e use um servidor local (ex: Live Server).</div>`;
-            });
+    function normalizeKey(key) {
+        return key.toString().trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
     function processarDados(rawData) {
@@ -665,37 +424,29 @@
 
         rawData.forEach(row => {
             const obj = {};
-            Object.keys(row).forEach(k => { obj[k.trim()] = row[k]; });
+            Object.keys(row).forEach(k => { obj[normalizeKey(k)] = row[k]; });
 
             let inep = obj['INEP'];
-            if (inep !== undefined && inep !== null) {
-                if (typeof inep === 'number') inep = String(Math.floor(inep));
-                else inep = String(inep).trim();
-            } else inep = '';
             if (!inep) return;
+            inep = String(inep).trim();
 
-            const nome = (obj['Escola'] || obj['NO_MUNICIPIO'] || 'Entidade sem nome').trim();
+            const nome = (obj['ESCOLA'] || obj['NO_MUNICIPIO'] || 'Entidade sem nome').trim();
             escolasMap.set(inep, nome);
 
-            const etapaStrOriginal = obj['Etapa'] || obj['ETAPA'] || '';
-            const etapaNum = extrairNumeroEtapa(etapaStrOriginal);
-            
-            // FILTRO ESTRITO: Ignora qualquer dado que não seja do 3º ano do Ensino Médio
-            if (etapaNum !== 3 && !String(etapaStrOriginal).toUpperCase().includes("EM")) {
-                return; 
-            }
-            
-            // Padroniza o nome da etapa para exibição uniforme no dashboard
-            const etapaPadronizada = "3ª Série do Ensino Médio";
+            const etapaRaw = String(obj['ETAPA'] || '').toUpperCase();
+            // FILTRO ESTRITO: Aceita APENAS se tiver "3" E ("EM" OU "MÉDIO" OU "SÉRIE")
+            const is3EM = etapaRaw.includes('3') && (etapaRaw.includes('EM') || etapaRaw.includes('MEDIO') || etapaRaw.includes('SERIE'));
+            if (!is3EM) return; // Descarta silenciosamente 5º e 9º anos
 
-            const componente = (obj['Componente'] || obj['COMP_ CURRICULAR'] || obj['COMPONENTE'] || '').trim();
+            const componenteRaw = (obj['COMPONENTE'] || obj['COMP_CURRICULAR'] || '').trim();
+            const componente = mapComponente(componenteRaw);
             if (!componente) return;
 
-            const edicao = String(obj['Edicao'] || obj['EDIÇÃO'] || obj['EDICAO'] || '').trim();
+            const edicao = String(obj['EDICAO'] || '').trim();
 
             const niveis = [];
             for (let i = 0; i <= 10; i++) {
-                const col = `Nível ${i}`;
+                const col = `NIVEL ${i}`;
                 let val = obj[col];
                 if (val === undefined || val === null || val === '-' || val === '') val = 0;
                 val = parseFloat(val);
@@ -703,35 +454,58 @@
                 niveis.push(val);
             }
 
-            dados.push({ inep, nome, etapaStr: etapaPadronizada, etapaNum: 3, componente, edicao, niveis });
+            dados.push({ inep, nome, etapaStr: "3º ANO EM", componente, edicao, niveis });
         });
 
         if (dados.length === 0) {
-            document.getElementById('statusMsg').innerHTML = '<span>Nenhum dado válido do 3º EM encontrado.</span>';
+            document.getElementById('statusMsg').innerHTML = '<span>Nenhum dado válido do 3º EM encontrado. Verifique as colunas do Excel.</span>';
             document.getElementById('statusMsg').className = 'status-msg error';
             return;
         }
 
-        document.getElementById('statusMsg').innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> ${dados.length} registros do 3º EM carregados!`;
+        document.getElementById('statusMsg').innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> ${dados.length} registros do 3º EM carregados com sucesso!`;
         document.getElementById('statusMsg').className = 'status-msg success';
         document.getElementById('placeholder').style.display = 'none';
         document.querySelector('.nav-tabs').style.display = 'flex';
         document.getElementById('myTabContent').style.display = 'block';
 
         popularEscolas();
-
         const escolaSelect = document.getElementById('escolaSelect');
         if (escolaSelect.options.length > 0) {
             escolaSelect.selectedIndex = 0;
-            const primeiroInep = escolaSelect.value;
-            popularEtapas(primeiroInep);
-            popularComponentes(primeiroInep, "3ª Série do Ensino Médio");
+            popularComponentes(escolaSelect.value, "3º ANO EM");
             const compSelect = document.getElementById('componenteSelect');
             if (compSelect.options.length > 0) compSelect.selectedIndex = 0;
         }
         
         renderizarPaletaNiveis();
         atualizarTudo();
+    }
+
+    // LEITURA DIRETA DO ARQUIVO (SEM UPLOAD)
+    function carregarArquivoLocal() {
+        fetch(CAMINHO_ARQUIVO)
+            .then(response => {
+                if (!response.ok) throw new Error("Arquivo não encontrado (Erro 404).");
+                return response.arrayBuffer();
+            })
+            .then(buffer => {
+                const workbook = XLSX.read(new Uint8Array(buffer), { type: 'array' });
+                const rawData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                if (rawData.length === 0) throw new Error("O arquivo está vazio.");
+                processarDados(rawData);
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('statusMsg').innerHTML = `<span class="text-danger">❌ Erro: ${err.message}</span>`;
+                document.getElementById('statusMsg').className = 'status-msg error';
+                document.getElementById('placeholder').innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>Erro ao carregar '${CAMINHO_ARQUIVO}'.</strong><br>
+                        Navegadores bloqueiam a leitura direta de arquivos locais por segurança (CORS).<br>
+                        <strong>Solução:</strong> Abra este arquivo HTML usando um servidor local (ex: Extensão "Live Server" do VS Code).
+                    </div>`;
+            });
     }
 
     function popularEscolas() {
@@ -746,16 +520,6 @@
         });
     }
 
-    function popularEtapas(inep) {
-        const select = document.getElementById('etapaSelect');
-        select.innerHTML = '';
-        const opt = document.createElement('option');
-        opt.value = "3ª Série do Ensino Médio";
-        opt.textContent = "3ª Série do Ensino Médio";
-        select.appendChild(opt);
-        select.value = "3ª Série do Ensino Médio";
-    }
-
     function popularComponentes(inep, etapa) {
         const select = document.getElementById('componenteSelect');
         select.innerHTML = '';
@@ -765,25 +529,24 @@
         sorted.forEach(c => {
             const opt = document.createElement('option');
             opt.value = c;
-            opt.textContent = c;
+            opt.textContent = c === 'LP' ? 'Língua Portuguesa' : (c === 'MT' ? 'Matemática' : c);
             select.appendChild(opt);
         });
     }
 
     function atualizarTudo() {
         const inep = document.getElementById('escolaSelect').value;
-        const etapa = "3ª Série do Ensino Médio"; // Forçado
+        const etapa = "3º ANO EM";
         const componente = document.getElementById('componenteSelect').value;
 
         if (!inep || !componente) return;
 
         const nomeEscola = escolasMap.get(inep) || '';
-        document.getElementById('subtituloTopo').innerHTML = `Entidade: <strong>${nomeEscola}</strong> (INEP: ${inep}) | Etapa: ${etapa} | Componente: ${componente}`;
+        document.getElementById('subtituloTopo').innerHTML = `Entidade: <strong>${nomeEscola}</strong> (INEP: ${inep}) | Etapa: ${etapa} | Componente: ${componente === 'LP' ? 'Língua Portuguesa' : 'Matemática'}`;
 
-        dadosFiltrados = dados.filter(d =>
-            d.inep === inep && d.etapaStr === etapa && d.componente === componente
-        );
-
+        dadosFiltrados = dados.filter(d => d.inep === inep && d.etapaStr === etapa && d.componente === componente);
+        
+        // Ordenação padrão (pode ser sobrescrita nas funções de renderização específicas)
         dadosFiltrados.sort((a,b) => a.edicao.localeCompare(b.edicao));
 
         renderizarDesempenho();
@@ -807,15 +570,17 @@
         const inepAtual = document.getElementById('escolaSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'escola';
 
-        dadosFiltrados.forEach((d, idx) => {
-            const { categorias, valoresCategorias, cores, textColors } = agruparNiveis(d.etapaStr, d.componente, d.niveis);
+        // ORDENAR DESCENDENTE PARA OS CARDS TAMBÉM
+        const dadosDesc = [...dadosFiltrados].sort((a, b) => b.edicao.localeCompare(a.edicao));
+
+        dadosDesc.forEach((d, idx) => {
+            const { categorias, valoresCategorias, cores, textColors } = agruparNiveis(d.componente, d.niveis);
             const adequado = (valoresCategorias[2] || 0) + (valoresCategorias[3] || 0);
             const adequadoArredondado = Math.round(adequado);
             const { bg, text } = corCardPorPercentual(adequadoArredondado);
 
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card-edicao';
-            
             const headerDiv = document.createElement('div');
             headerDiv.className = 'd-flex justify-content-between align-items-center mb-3';
             const title = document.createElement('h5');
@@ -827,11 +592,10 @@
             btnDownload.className = 'btn btn-outline-secondary fw-semibold';
             btnDownload.innerHTML = '<i class="bi bi-download"></i> Baixar';
             btnDownload.onclick = function() {
-                const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
                 const canvasEl = document.getElementById(`chart-${idx}`);
                 const a = document.createElement('a');
                 a.href = canvasEl.toDataURL('image/png');
-                a.download = `${nomeLimpo}_${inepAtual}_Edicao_${d.edicao}.png`;
+                a.download = `${nomeEscola.replace(/[^a-zA-Z0-9]/g, '_')}_${inepAtual}_Edicao_${d.edicao}.png`;
                 a.click();
             };
             headerDiv.appendChild(btnDownload);
@@ -849,58 +613,40 @@
 
             const colCard = document.createElement('div');
             colCard.className = 'col-md-3 text-center';
-            const cardAprend = document.createElement('div');
-            cardAprend.className = 'card-aprendizagem';
-            cardAprend.style.backgroundColor = bg;
-            cardAprend.style.color = text;
-            cardAprend.innerHTML = `<h6>Aprendizagem Adequada</h6><div class="valor">${adequadoArredondado}%</div>`;
-            colCard.appendChild(cardAprend);
+            colCard.innerHTML = `<div class="card-aprendizagem" style="background-color: ${bg}; color: ${text};"><h6>Aprendizagem Adequada</h6><div class="valor">${adequadoArredondado}%</div></div>`;
             row.appendChild(colCard);
             cardDiv.appendChild(row);
             container.appendChild(cardDiv);
 
             const ctx = canvas.getContext('2d');
             const datasets = categorias.map((cat, i) => ({
-                label: cat,
-                data: [valoresCategorias[i]],
-                backgroundColor: cores[i],
-                borderColor: '#ffffff',
-                borderWidth: 1.5,
-                borderRadius: 4
+                label: cat, data: [valoresCategorias[i]], backgroundColor: cores[i], borderColor: '#ffffff', borderWidth: 1.5, borderRadius: 4
             }));
 
             const chart = new Chart(ctx, {
                 type: 'bar',
                 data: { labels: [''], datasets },
                 options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'top', labels: { boxWidth: 14, font: { size: 11, weight: '600' } } },
-                        datalabels: {
-                            color: function(context) { return textColors[context.datasetIndex] || '#fff'; },
-                            font: { weight: 'bold', size: 14 },
-                            formatter: function(value) { return Math.round(value) >= 3 ? `${Math.round(value)}%` : ''; }
-                        }
+                        datalabels: { color: function(context) { return textColors[context.datasetIndex] || '#fff'; }, font: { weight: 'bold', size: 14 }, formatter: function(value) { return Math.round(value) >= 3 ? `${Math.round(value)}%` : ''; } }
                     },
-                    scales: {
-                        x: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%', stepSize: 20 }, grid: { display: false } },
-                        y: { stacked: true, display: false, grid: { display: false } }
-                    }
+                    scales: { x: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%', stepSize: 20 }, grid: { display: false } }, y: { stacked: true, display: false, grid: { display: false } } }
                 }
             });
             graficosBarras.push({ chart, edicao: d.edicao, adequado });
         });
     }
 
-    // === ABA 2: Distribuição por Níveis ===
+    // === ABA 2: Distribuição por Níveis (GRÁFICO EMPILHADO 100% DESCENDENTE) ===
     function renderizarDistribuicao() {
         if (graficoDistribuicao) { graficoDistribuicao.destroy(); graficoDistribuicao = null; }
         const canvas = document.getElementById('graficoDistribuicao');
         if (!canvas || dadosFiltrados.length === 0) return;
 
-        const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
+        // ORDEM DECRESCENTE (2025, 2023, 2021...)
+        const dadosCron = [...dadosFiltrados].sort((a, b) => b.edicao.localeCompare(a.edicao));
         const edicoes = dadosCron.map(d => d.edicao);
         
         const datasets = [];
@@ -908,11 +654,7 @@
             datasets.push({
                 label: `Nível ${nivel}`,
                 data: dadosCron.map(d => Math.round((d.niveis[nivel] || 0) * 100) / 100),
-                backgroundColor: CORES_NIVEIS[nivel],
-                borderColor: '#ffffff',
-                borderWidth: 1,
-                borderRadius: 3,
-                borderSkipped: false
+                backgroundColor: CORES_NIVEIS[nivel], borderColor: '#ffffff', borderWidth: 1, borderRadius: 3, borderSkipped: false
             });
         }
 
@@ -920,8 +662,7 @@
             type: 'bar',
             data: { labels: edicoes, datasets },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
                     legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10, weight: '600' }, usePointStyle: true } },
                     datalabels: {
@@ -931,10 +672,7 @@
                         formatter: function(value) { return Math.round(value) >= 3 ? `${Math.round(value)}%` : ''; }
                     }
                 },
-                scales: {
-                    x: { grid: { display: false }, ticks: { font: { size: 13, weight: '700' } } },
-                    y: { beginAtZero: true, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Percentual (%)' } }
-                }
+                scales: { x: { grid: { display: false }, ticks: { font: { size: 13, weight: '700' } } }, y: { beginAtZero: true, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Percentual (%)' } } }
             }
         });
     }
@@ -950,97 +688,61 @@
         }
     }
 
-    // === ABA 3: Evolução Histórica (COM CEARÁ E BRASIL) ===
+    // === ABA 3: Evolução Histórica (Mantida cronológica para fazer sentido visual) ===
     function renderizarEvolucao() {
         if (graficoEvolucao) { graficoEvolucao.destroy(); graficoEvolucao = null; }
         const canvas = document.getElementById('graficoEvolucao');
         if (!canvas || dadosFiltrados.length === 0) return;
 
         const inepAtual = document.getElementById('escolaSelect').value;
-        const etapaAtual = "3ª Série do Ensino Médio";
+        const etapaAtual = "3º ANO EM";
         const componenteAtual = document.getElementById('componenteSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
         
-        const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
+        const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao)); // Linha do tempo deve ser crescente
         const edicoes = dadosCron.map(d => d.edicao);
         
         const adequadosEscola = dadosCron.map(d => {
-            const { valoresCategorias } = agruparNiveis(d.etapaStr, d.componente, d.niveis);
+            const { valoresCategorias } = agruparNiveis(d.componente, d.niveis);
             return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
         });
 
-        // Buscar dados do Ceará
-        const dadosCeara = dados.filter(d => 
-            d.nome.toUpperCase().includes('CEARÁ') && d.etapaStr === etapaAtual && d.componente === componenteAtual
-        ).sort((a, b) => a.edicao.localeCompare(b.edicao));
-        
+        const dadosCeara = dados.filter(d => d.nome.toUpperCase().includes('CEARÁ') && d.etapaStr === etapaAtual && d.componente === componenteAtual).sort((a, b) => a.edicao.localeCompare(b.edicao));
         const adequadosCeara = edicoes.map(ed => {
             const encontrado = dadosCeara.find(d => d.edicao === ed);
             if (!encontrado) return null;
-            const { valoresCategorias } = agruparNiveis(encontrado.etapaStr, encontrado.componente, encontrado.niveis);
+            const { valoresCategorias } = agruparNiveis(encontrado.componente, encontrado.niveis);
             return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
         });
 
-        // Buscar dados do Brasil
-        const dadosBrasil = dados.filter(d => 
-            d.nome.toUpperCase().includes('BRASIL') && d.etapaStr === etapaAtual && d.componente === componenteAtual
-        ).sort((a, b) => a.edicao.localeCompare(b.edicao));
-        
+        const dadosBrasil = dados.filter(d => d.nome.toUpperCase().includes('BRASIL') && d.etapaStr === etapaAtual && d.componente === componenteAtual).sort((a, b) => a.edicao.localeCompare(b.edicao));
         const adequadosBrasil = edicoes.map(ed => {
             const encontrado = dadosBrasil.find(d => d.edicao === ed);
             if (!encontrado) return null;
-            const { valoresCategorias } = agruparNiveis(encontrado.etapaStr, encontrado.componente, encontrado.niveis);
+            const { valoresCategorias } = agruparNiveis(encontrado.componente, encontrado.niveis);
             return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
         });
 
         const datasets = [{
-            label: nomeEscola,
-            data: adequadosEscola,
-            borderColor: '#196F3D',
-            backgroundColor: 'rgba(25, 111, 61, 0.1)',
-            tension: 0.25, fill: true, pointRadius: 6, pointBackgroundColor: '#196F3D', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3
+            label: nomeEscola, data: adequadosEscola, borderColor: '#196F3D', backgroundColor: 'rgba(25, 111, 61, 0.1)', tension: 0.25, fill: true, pointRadius: 6, pointBackgroundColor: '#196F3D', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3
         }];
 
         if (dadosCeara.length > 0) {
-            datasets.push({
-                label: 'Ceará (Estado)',
-                data: adequadosCeara,
-                borderColor: '#8b5cf6',
-                backgroundColor: 'rgba(139, 92, 246, 0.05)',
-                tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#8b5cf6', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [6, 4]
-            });
+            datasets.push({ label: 'Ceará (Estado)', data: adequadosCeara, borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.05)', tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#8b5cf6', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [6, 4] });
         }
-
         if (dadosBrasil.length > 0) {
-            datasets.push({
-                label: 'Brasil (Nacional)',
-                data: adequadosBrasil,
-                borderColor: '#f59e0b',
-                backgroundColor: 'rgba(245, 158, 11, 0.05)',
-                tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#f59e0b', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [2, 2]
-            });
+            datasets.push({ label: 'Brasil (Nacional)', data: adequadosBrasil, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.05)', tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#f59e0b', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [2, 2] });
         }
 
         graficoEvolucao = new Chart(canvas.getContext('2d'), {
-            type: 'line',
-            data: { labels: edicoes, datasets },
+            type: 'line', data: { labels: edicoes, datasets },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
                     legend: { position: 'top', labels: { font: { size: 12, weight: '600' }, usePointStyle: true, pointStyle: 'circle' } },
-                    datalabels: {
-                        align: 'top', anchor: 'end',
-                        color: function(context) { return context.dataset.borderColor; },
-                        font: { weight: 'bold', size: 12 },
-                        backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: 4, padding: 4,
-                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 8
-                    }
+                    datalabels: { align: 'top', anchor: 'end', color: function(context) { return context.dataset.borderColor; }, font: { weight: 'bold', size: 12 }, backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: 4, padding: 4, formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 8 }
                 },
-                scales: {
-                    y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } },
-                    x: { grid: { display: false }, ticks: { font: { size: 13, weight: '600' } } }
-                }
+                scales: { y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false }, ticks: { font: { size: 13, weight: '600' } } } }
             }
         });
     }
@@ -1056,7 +758,7 @@
 
         const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
         const edicoesComAdequada = dadosCron.map(d => {
-            const { valoresCategorias } = agruparNiveis(d.etapaStr, d.componente, d.niveis);
+            const { valoresCategorias } = agruparNiveis(d.componente, d.niveis);
             return { edicao: d.edicao, adequada: Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0)) };
         });
 
@@ -1100,8 +802,7 @@
                 </div>
                 <div class="diferenca-badge"><i class="bi ${iconeTotal}"></i><span>Diferença Total: <strong>${textoTotal}</strong></span></div>
             </div>
-            <div class="comparacao-grid">
-        `;
+            <div class="comparacao-grid">`;
 
         comparacoes.forEach(c => {
             let icone = c.diferenca > 0 ? 'bi-arrow-up-right-circle-fill' : (c.diferenca < 0 ? 'bi-arrow-down-right-circle-fill' : 'bi-dash-circle-fill');
@@ -1115,8 +816,7 @@
                         <div class="valor-item"><div class="label">Seguinte</div><div class="numero">${c.atual.adequada}%</div></div>
                     </div>
                     <div class="diferenca-badge"><i class="bi ${icone}"></i><span><strong>${c.textoDif}</strong></span></div>
-                </div>
-            `;
+                </div>`;
         });
         html += '</div>';
         container.innerHTML = html;
@@ -1125,18 +825,16 @@
     // Event Listeners de Download
     document.getElementById('btnBaixarDistribuicao').addEventListener('click', function() {
         if (!graficoDistribuicao) return;
-        const canvasEl = document.getElementById('graficoDistribuicao');
         const a = document.createElement('a');
-        a.href = canvasEl.toDataURL('image/png');
+        a.href = document.getElementById('graficoDistribuicao').toDataURL('image/png');
         a.download = `Distribuicao_Niveis_${document.getElementById('escolaSelect').value}.png`;
         a.click();
     });
 
     document.getElementById('btnBaixarEvolucao').addEventListener('click', function() {
         if (!graficoEvolucao) return;
-        const canvasEl = document.getElementById('graficoEvolucao');
         const a = document.createElement('a');
-        a.href = canvasEl.toDataURL('image/png');
+        a.href = document.getElementById('graficoEvolucao').toDataURL('image/png');
         a.download = `Evolucao_SAEB_${document.getElementById('escolaSelect').value}.png`;
         a.click();
     });
@@ -1155,7 +853,7 @@
     // Event Listeners de Filtros
     document.getElementById('escolaSelect').addEventListener('change', function() {
         if (this.value) {
-            popularComponentes(this.value, "3ª Série do Ensino Médio");
+            popularComponentes(this.value, "3º ANO EM");
             const compSelect = document.getElementById('componenteSelect');
             if (compSelect.options.length > 0) compSelect.selectedIndex = 0;
             atualizarTudo();
@@ -1170,7 +868,7 @@
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
         const headerBox = document.getElementById('pdfHeaderBox');
         document.getElementById('pdfEscolaNome').textContent = `Instituição: ${nomeEscola}`;
-        document.getElementById('pdfDetalhesInfo').textContent = `INEP: ${inepAtual} | Etapa: 3ª Série do Ensino Médio | Componente: ${document.getElementById('componenteSelect').value}`;
+        document.getElementById('pdfDetalhesInfo').textContent = `INEP: ${inepAtual} | Etapa: 3º ANO EM | Componente: ${document.getElementById('componenteSelect').value === 'LP' ? 'Língua Portuguesa' : 'Matemática'}`;
         headerBox.style.display = 'block';
 
         html2canvas(document.getElementById('mainContent'), { scale: 2, useCORS: true }).then(canvas => {
@@ -1198,6 +896,8 @@
 
     document.querySelector('.nav-tabs').style.display = 'none';
     document.getElementById('myTabContent').style.display = 'none';
+    
+    // INICIALIZAÇÃO: Tenta carregar o arquivo diretamente
     window.addEventListener('DOMContentLoaded', carregarArquivoLocal);
 </script>
 </body>
