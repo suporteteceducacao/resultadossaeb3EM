@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Análise de Desempenho SAEB - Ensino Médio</title>
+    <title>Análise de Desempenho SAEB - 3º Ano do Ensino Médio</title>
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Bootstrap Icons -->
@@ -89,6 +89,7 @@
         .select-label { font-weight: 600; margin-top: 14px; margin-bottom: 6px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .sidebar .form-select { margin-bottom: 4px; border-radius: 10px; border: 1.5px solid var(--cor-borda); padding: 10px 14px; font-size: 0.9rem; }
         .sidebar .form-select:focus { border-color: var(--cor-primaria-light); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+        .sidebar .form-select:disabled { background-color: #e9ecef; cursor: not-allowed; }
         
         .pdf-header-print { display: none; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 24px 28px; border-radius: 12px; margin-bottom: 24px; }
         
@@ -159,7 +160,6 @@
         .paleta-niveis .item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--cor-texto); }
         .paleta-niveis .dot { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
 
-        /* Estilos específicos para a aba de Metodologia */
         .metodologia-table { font-size: 0.9rem; }
         .metodologia-table th { background-color: var(--cor-primaria); color: white; font-weight: 600; text-align: center; vertical-align: middle; }
         .metodologia-table td { vertical-align: middle; text-align: center; }
@@ -196,8 +196,8 @@
                         </linearGradient>
                     </defs>
                     <rect width="220" height="75" rx="12" fill="url(#logoGrad)"/>
-                    <text x="20" y="35" font-family="Inter, sans-serif" font-size="20" fill="#ffffff" font-weight="800">ANÁLISE SAEB</text>
-                    <text x="20" y="55" font-family="Inter, sans-serif" font-size="11" fill="#93c5fd" font-weight="500">ENSINO MÉDIO</text>
+                    <text x="20" y="35" font-family="Inter, sans-serif" font-size="18" fill="#ffffff" font-weight="800">ANÁLISE SAEB</text>
+                    <text x="20" y="55" font-family="Inter, sans-serif" font-size="11" fill="#93c5fd" font-weight="500">3º ANO DO ENSINO MÉDIO</text>
                 </svg>
             </div>
 
@@ -209,7 +209,9 @@
                 <select id="escolaSelect" class="form-select shadow-sm"></select>
 
                 <label class="select-label">Etapa</label>
-                <select id="etapaSelect" class="form-select shadow-sm"></select>
+                <select id="etapaSelect" class="form-select shadow-sm" disabled>
+                    <option value="3ª Série do Ensino Médio">3ª Série do Ensino Médio</option>
+                </select>
 
                 <label class="select-label">Componente Curricular</label>
                 <select id="componenteSelect" class="form-select shadow-sm"></select>
@@ -259,7 +261,7 @@
                     <span class="icon-wrapper"><i class="bi bi-bar-chart-line-fill"></i></span>
                     Análise de Desempenho SAEB
                 </h1>
-                <p class="page-subtitle" id="subtituloTopo">Visualização automática dos resultados por edição e evolução da aprendizagem.</p>
+                <p class="page-subtitle" id="subtituloTopo">Visualização automática dos resultados do 3º Ano do Ensino Médio por edição e evolução.</p>
             </div>
 
             <div id="placeholder" class="loading-box">
@@ -322,7 +324,7 @@
                     </div>
                 </div>
 
-                <!-- Aba 3: Evolução Histórica (COM CEARÁ E BRASIL) -->
+                <!-- Aba 3: Evolução Histórica -->
                 <div class="tab-pane fade" id="evolucao" role="tabpanel">
                     <div class="card-edicao">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -366,10 +368,10 @@
                     </div>
                 </div>
 
-                <!-- NOVA ABA 5: Metodologia de Estudo -->
+                <!-- Aba 5: Metodologia de Estudo -->
                 <div class="tab-pane fade" id="metodologia" role="tabpanel">
                     <div class="card-edicao">
-                        <h5 class="mb-4 fw-bold"><i class="bi bi-book-half text-primary me-2"></i>Metodologia de Classificação e Estudo (Ensino Médio)</h5>
+                        <h5 class="mb-4 fw-bold"><i class="bi bi-book-half text-primary me-2"></i>Metodologia de Classificação e Estudo (3º Ano do Ensino Médio)</h5>
                         
                         <div class="row g-4">
                             <div class="col-lg-6">
@@ -471,7 +473,7 @@
                                         <div class="fw-bold">Boletim Pedagógico - Língua Portuguesa</div>
                                         <small class="text-muted">Análise qualitativa dos resultados de LP no Ensino Médio.</small>
                                     </div>
-                </a>
+                                </a>
                             </div>
                             <div class="col-md-6">
                                 <a href="#" class="link-estudo" target="_blank">
@@ -571,46 +573,30 @@
     }
 
     // ========================================================================
-    // LÓGICA ATUALIZADA DE AGRUPAMENTO (ENSINO MÉDIO)
+    // LÓGICA EXCLUSIVA DE AGRUPAMENTO (ENSINO MÉDIO - 3º ANO)
     // ========================================================================
     function agruparNiveis(etapa, componente, valores) {
         let grupos = {};
         const comp = mapComponente(componente);
-        const etapaNum = extrairNumeroEtapa(etapa);
 
-        // Lógica específica para o Ensino Médio (3º ano / 3ª série) conforme solicitado
-        if (etapaNum === 3 || String(etapa).includes("3") || String(etapa).toUpperCase().includes("EM")) {
-            if (comp === "LP") {
-                grupos = {
-                    'ABAIXO DO BÁSICO': [0, 1, 2, 3, 4],
-                    'BÁSICO': [5],
-                    'PROFICIENTE': [6, 7],
-                    'AVANÇADO': [8, 9, 10]
-                };
-            } else if (comp === "MT") {
-                grupos = {
-                    'ABAIXO DO BÁSICO': [0, 1, 2, 3, 4, 5],
-                    'BÁSICO': [6, 7, 8],
-                    'PROFICIENTE': [9],
-                    'AVANÇADO': [10]
-                };
-            } else {
-                // Fallback genérico para 3º ano se o componente não for identificado como LP ou MT
-                grupos = {'ABAIXO DO BÁSICO': [0,1,2,3,4], 'BÁSICO':[5], 'PROFICIENTE':[6,7], 'AVANÇADO':[8,9,10]};
-            }
+        // Lógica estrita para o 3º Ano do Ensino Médio
+        if (comp === "LP") {
+            grupos = {
+                'ABAIXO DO BÁSICO': [0, 1, 2, 3, 4],
+                'BÁSICO': [5],
+                'PROFICIENTE': [6, 7],
+                'AVANÇADO': [8, 9, 10]
+            };
+        } else if (comp === "MT") {
+            grupos = {
+                'ABAIXO DO BÁSICO': [0, 1, 2, 3, 4, 5],
+                'BÁSICO': [6, 7, 8],
+                'PROFICIENTE': [9],
+                'AVANÇADO': [10]
+            };
         } else {
-            // Manter lógica original para 5º e 9º anos (caso o arquivo tenha dados misturados)
-            if (etapaNum === 5 && comp === "LP") {
-                grupos = {'ABAIXO DO BÁSICO': [0,1], 'BÁSICO':[2,3], 'PROFICIENTE':[4,5], 'AVANÇADO':[6,7,8,9]};
-            } else if (etapaNum === 5 && comp === "MT") {
-                grupos = {'ABAIXO DO BÁSICO': [0,1,2], 'BÁSICO':[3,4], 'PROFICIENTE':[5,6], 'AVANÇADO':[7,8,9]};
-            } else if (etapaNum === 9 && comp === "LP") {
-                grupos = {'ABAIXO DO BÁSICO': [0], 'BÁSICO':[1,2,3], 'PROFICIENTE':[4,5], 'AVANÇADO':[6,7,8]};
-            } else if (etapaNum === 9 && comp === "MT") {
-                grupos = {'ABAIXO DO BÁSICO':[0,1], 'BÁSICO':[2,3,4], 'PROFICIENTE':[5,6], 'AVANÇADO':[7,8,9]};
-            } else {
-                grupos = {'ABAIXO DO BÁSICO': [0,1,2], 'BÁSICO':[3,4], 'PROFICIENTE':[5,6], 'AVANÇADO':[7,8,9,10]};
-            }
+            // Fallback genérico para 3º EM caso de componente não identificado
+            grupos = {'ABAIXO DO BÁSICO': [0,1,2,3,4], 'BÁSICO':[5], 'PROFICIENTE':[6,7], 'AVANÇADO':[8,9,10]};
         }
 
         const cores = {
@@ -691,9 +677,16 @@
             const nome = (obj['Escola'] || obj['NO_MUNICIPIO'] || 'Entidade sem nome').trim();
             escolasMap.set(inep, nome);
 
-            const etapaStr = obj['Etapa'] || obj['ETAPA'] || '';
-            const etapaNum = extrairNumeroEtapa(etapaStr);
-            if (etapaNum === null && !String(etapaStr).toUpperCase().includes("EM")) return;
+            const etapaStrOriginal = obj['Etapa'] || obj['ETAPA'] || '';
+            const etapaNum = extrairNumeroEtapa(etapaStrOriginal);
+            
+            // FILTRO ESTRITO: Ignora qualquer dado que não seja do 3º ano do Ensino Médio
+            if (etapaNum !== 3 && !String(etapaStrOriginal).toUpperCase().includes("EM")) {
+                return; 
+            }
+            
+            // Padroniza o nome da etapa para exibição uniforme no dashboard
+            const etapaPadronizada = "3ª Série do Ensino Médio";
 
             const componente = (obj['Componente'] || obj['COMP_ CURRICULAR'] || obj['COMPONENTE'] || '').trim();
             if (!componente) return;
@@ -710,16 +703,16 @@
                 niveis.push(val);
             }
 
-            dados.push({ inep, nome, etapaStr, etapaNum, componente, edicao, niveis });
+            dados.push({ inep, nome, etapaStr: etapaPadronizada, etapaNum: 3, componente, edicao, niveis });
         });
 
         if (dados.length === 0) {
-            document.getElementById('statusMsg').innerHTML = '<span>Nenhum dado válido encontrado.</span>';
+            document.getElementById('statusMsg').innerHTML = '<span>Nenhum dado válido do 3º EM encontrado.</span>';
             document.getElementById('statusMsg').className = 'status-msg error';
             return;
         }
 
-        document.getElementById('statusMsg').innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> ${dados.length} registros carregados!`;
+        document.getElementById('statusMsg').innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> ${dados.length} registros do 3º EM carregados!`;
         document.getElementById('statusMsg').className = 'status-msg success';
         document.getElementById('placeholder').style.display = 'none';
         document.querySelector('.nav-tabs').style.display = 'flex';
@@ -732,13 +725,9 @@
             escolaSelect.selectedIndex = 0;
             const primeiroInep = escolaSelect.value;
             popularEtapas(primeiroInep);
-            const etapaSelect = document.getElementById('etapaSelect');
-            if (etapaSelect.options.length > 0) {
-                etapaSelect.selectedIndex = 0;
-                popularComponentes(primeiroInep, etapaSelect.value);
-                const compSelect = document.getElementById('componenteSelect');
-                if (compSelect.options.length > 0) compSelect.selectedIndex = 0;
-            }
+            popularComponentes(primeiroInep, "3ª Série do Ensino Médio");
+            const compSelect = document.getElementById('componenteSelect');
+            if (compSelect.options.length > 0) compSelect.selectedIndex = 0;
         }
         
         renderizarPaletaNiveis();
@@ -760,17 +749,11 @@
     function popularEtapas(inep) {
         const select = document.getElementById('etapaSelect');
         select.innerHTML = '';
-        const etapas = new Set();
-        dados.filter(d => d.inep === inep).forEach(d => {
-            if(d.etapaStr) etapas.add(d.etapaStr);
-        });
-        const sorted = Array.from(etapas).sort();
-        sorted.forEach(e => {
-            const opt = document.createElement('option');
-            opt.value = e;
-            opt.textContent = e;
-            select.appendChild(opt);
-        });
+        const opt = document.createElement('option');
+        opt.value = "3ª Série do Ensino Médio";
+        opt.textContent = "3ª Série do Ensino Médio";
+        select.appendChild(opt);
+        select.value = "3ª Série do Ensino Médio";
     }
 
     function popularComponentes(inep, etapa) {
@@ -789,10 +772,10 @@
 
     function atualizarTudo() {
         const inep = document.getElementById('escolaSelect').value;
-        const etapa = document.getElementById('etapaSelect').value;
+        const etapa = "3ª Série do Ensino Médio"; // Forçado
         const componente = document.getElementById('componenteSelect').value;
 
-        if (!inep || !etapa || !componente) return;
+        if (!inep || !componente) return;
 
         const nomeEscola = escolasMap.get(inep) || '';
         document.getElementById('subtituloTopo').innerHTML = `Entidade: <strong>${nomeEscola}</strong> (INEP: ${inep}) | Etapa: ${etapa} | Componente: ${componente}`;
@@ -826,7 +809,6 @@
 
         dadosFiltrados.forEach((d, idx) => {
             const { categorias, valoresCategorias, cores, textColors } = agruparNiveis(d.etapaStr, d.componente, d.niveis);
-            // Aprendizagem adequada é sempre a soma dos índices 2 (Proficiente) e 3 (Avançado)
             const adequado = (valoresCategorias[2] || 0) + (valoresCategorias[3] || 0);
             const adequadoArredondado = Math.round(adequado);
             const { bg, text } = corCardPorPercentual(adequadoArredondado);
@@ -975,7 +957,7 @@
         if (!canvas || dadosFiltrados.length === 0) return;
 
         const inepAtual = document.getElementById('escolaSelect').value;
-        const etapaAtual = document.getElementById('etapaSelect').value;
+        const etapaAtual = "3ª Série do Ensino Médio";
         const componenteAtual = document.getElementById('componenteSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
         
@@ -1170,25 +1152,10 @@
         });
     });
 
-    // Event Listers de Filtros
+    // Event Listeners de Filtros
     document.getElementById('escolaSelect').addEventListener('change', function() {
         if (this.value) {
-            popularEtapas(this.value);
-            const etapaSelect = document.getElementById('etapaSelect');
-            if (etapaSelect.options.length > 0) {
-                etapaSelect.selectedIndex = 0;
-                popularComponentes(this.value, etapaSelect.value);
-                const compSelect = document.getElementById('componenteSelect');
-                if (compSelect.options.length > 0) compSelect.selectedIndex = 0;
-                atualizarTudo();
-            }
-        }
-    });
-
-    document.getElementById('etapaSelect').addEventListener('change', function() {
-        const inep = document.getElementById('escolaSelect').value;
-        if (inep && this.value) {
-            popularComponentes(inep, this.value);
+            popularComponentes(this.value, "3ª Série do Ensino Médio");
             const compSelect = document.getElementById('componenteSelect');
             if (compSelect.options.length > 0) compSelect.selectedIndex = 0;
             atualizarTudo();
@@ -1203,7 +1170,7 @@
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
         const headerBox = document.getElementById('pdfHeaderBox');
         document.getElementById('pdfEscolaNome').textContent = `Instituição: ${nomeEscola}`;
-        document.getElementById('pdfDetalhesInfo').textContent = `INEP: ${inepAtual} | Etapa: ${document.getElementById('etapaSelect').value} | Componente: ${document.getElementById('componenteSelect').value}`;
+        document.getElementById('pdfDetalhesInfo').textContent = `INEP: ${inepAtual} | Etapa: 3ª Série do Ensino Médio | Componente: ${document.getElementById('componenteSelect').value}`;
         headerBox.style.display = 'block';
 
         html2canvas(document.getElementById('mainContent'), { scale: 2, useCORS: true }).then(canvas => {
