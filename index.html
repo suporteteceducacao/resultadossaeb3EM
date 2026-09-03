@@ -259,7 +259,7 @@
             <div class="page-header">
                 <h1 class="page-title">
                     <span class="icon-wrapper"><i class="bi bi-bar-chart-line-fill"></i></span>
-                    Análise de Desempenho SAEB
+                    Análise de Desempenho SAEB - 3º ANO ENSINO MÉDIO
                 </h1>
                 <p class="page-subtitle" id="subtituloTopo">Visualização automática dos resultados do 3º Ano do Ensino Médio por edição e evolução.</p>
             </div>
@@ -900,7 +900,8 @@
         const canvas = document.getElementById('graficoDistribuicao');
         if (!canvas || dadosFiltrados.length === 0) return;
 
-        const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
+        // Ordenar do mais recente para o mais antigo
+        const dadosCron = [...dadosFiltrados].sort((a, b) => b.edicao.localeCompare(a.edicao));
         const edicoes = dadosCron.map(d => d.edicao);
         
         const datasets = [];
