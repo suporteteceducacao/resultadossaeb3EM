@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Análise de Desempenho SAEB por Níveis</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Chart.js DataLabels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <!-- SheetJS (XLSX) -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <!-- html2canvas + jsPDF -->
+    <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --cor-primaria: #1e3a8a;
+            --cor-primaria-light: #3b82f6;
+            --cor-secundaria: #f59e0b;
+            --cor-fundo: #f8fafc;
+            --cor-card: #ffffff;
+            --cor-texto: #1e293b;
+            --cor-texto-claro: #64748b;
+            --cor-borda: #e2e8f0;
+            --cor-sucesso: #10b981;
+            --cor-perigo: #ef4444;
+            --cor-info: #3b82f6;
+            
+            /* Cores originais dos 4 grandes grupos */
+            --nivel-abaixo: #FF4136;
+            --nivel-basico: #FF851B;
+            --nivel-proficiente: #B0E57C;
+            --nivel-avancado: #006400;
+            
+            --cor-maracanau: #8b5cf6;
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            background: var(--cor-fundo);
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--cor-texto);
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border-right: 1px solid var(--cor-borda);
+            min-height: 100vh;
+            position: sticky;
+            top: 0;
+            padding: 28px 22px;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0,0,0,0.04);
+        }
+        
+        .sidebar .logo-container { text-align: center; margin-bottom: 24px; }
+        
+        .main-content { padding: 36px 40px; }
+        
+        .card-edicao {
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            background: var(--cor-card);
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--cor-borda);
+            transition: all 0.3s ease;
+        }
+        
+        .card-edicao:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+        
+        .card-aprendizagem {
+            border-radius: 14px;
+            padding: 18px 20px;
+            text-align: center;
+            min-width: 180px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card-aprendizagem h6 {
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+        }
+        
+        .card-aprendizagem .valor {
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .footer {
+            border-top: 1px solid var(--cor-borda);
+            padding: 30px 0;
+            margin-top: 60px;
+            text-align: center;
+            color: var(--cor-texto-claro);
+            font-size: 0.875rem;
+        }
+        
+        .tab-content { margin-top: 28px; }
+        
+        .nav-tabs { border-bottom: 2px solid var(--cor-borda); gap: 8px; }
+        
+        .nav-tabs .nav-link {
+            font-weight: 600;
+            color: var(--cor-texto-claro);
+            border: none;
+            border-radius: 10px 10px 0 0;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            color: var(--cor-primaria);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--cor-primaria);
+            background-color: var(--cor-card);
+            border-bottom: 3px solid var(--cor-primaria-light);
+            font-weight: 700;
+        }
+        
+        .grafico-wrapper { height: 180px; width: 100%; }
+        .grafico-wrapper-vertical { height: 520px; width: 100%; padding: 10px; }
+        
+        .select-label {
+            font-weight: 600;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .sidebar .form-select {
+            margin-bottom: 4px;
+            border-radius: 10px;
+            border: 1.5px solid var(--cor-borda);
+            padding: 10px 14px;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar .form-select:focus {
+            border-color: var(--cor-primaria-light);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        
+        .pdf-header-print {
+            display: none;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 24px 28px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-light) 100%);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .btn-outline-secondary {
+            border: 1.5px solid var(--cor-borda);
+            color: var(--cor-texto);
+            border-radius: 10px;
+            padding: 6px 14px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .btn-outline-secondary:hover {
+            background: var(--cor-primaria);
+            color: white;
+            border-color: var(--cor-primaria);
+        }
+        
+        .btn-outline-success {
+            border: 1.5px solid var(--cor-sucesso);
+            color: var(--cor-sucesso);
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-weight: 600;
+        }
+        
+        .btn-outline-success:hover {
+            background: var(--cor-sucesso);
+            border-color: var(--cor-sucesso);
+            color: white;
+        }
+        
+        .btn-outline-primary {
+            border: 1.5px solid var(--cor-primaria);
+            color: var(--cor-primaria);
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--cor-primaria);
+            border-color: var(--cor-primaria);
+            color: white;
+        }
+        
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--cor-borda);
+        }
+        
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .page-title .icon-wrapper {
+            background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-light) 100%);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .page-subtitle { color: var(--cor-texto-claro); font-size: 1rem; margin: 0; }
+        .page-subtitle strong { color: var(--cor-primaria); font-weight: 700; }
+        
+        .legend-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--cor-borda);
+        }
+        
+        .legend-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 0.9rem; font-weight: 500; }
+        .legend-dot { width: 16px; height: 16px; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.15); flex-shrink: 0; }
+        
+        .info-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid var(--cor-primaria);
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.875rem;
+            color: var(--cor-primaria);
+        }
+        
+        .info-box.comparativo {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-left-color: var(--cor-maracanau);
+            color: var(--cor-maracanau);
+        }
+        
+        .learning-types-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid var(--cor-borda);
+            border-radius: 16px;
+            padding: 28px;
+            margin-top: 40px;
+        }
+        
+        .learning-types-card h5 { font-weight: 800; margin-bottom: 20px; }
+        .learning-types-card ul li { padding: 10px 0; border-bottom: 1px solid var(--cor-borda); }
+        .learning-types-card ul li:last-child { border-bottom: none; }
+        .learning-types-card strong { color: var(--cor-primaria); font-weight: 700; }
+        
+        .status-msg {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: #eff6ff;
+            color: var(--cor-primaria);
+            margin-bottom: 14px;
+        }
+        
+        .status-msg.success { background: #d1fae5; color: var(--cor-sucesso); }
+        .status-msg.error { background: #fee2e2; color: var(--cor-perigo); }
+        
+        .loading-box {
+            background: white;
+            border: 1px solid var(--cor-borda);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        /* ============================================================ */
+        /* CARDS DE COMPARAÇÃO TEMPORAL (NOVA ABA)                       */
+        /* ============================================================ */
+        .comparacao-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .card-comparacao {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid var(--cor-borda);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-comparacao::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--card-accent-color, #94a3b8);
+        }
+        
+        .card-comparacao:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+        
+        .card-comparacao.crescimento { --card-accent-color: var(--cor-sucesso); }
+        .card-comparacao.recuo { --card-accent-color: var(--cor-perigo); }
+        .card-comparacao.estavel { --card-accent-color: var(--cor-info); }
+        
+        .card-comparacao .periodo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--cor-borda);
+        }
+        
+        .card-comparacao .edicao-box {
+            background: #f8fafc;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--cor-texto);
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .card-comparacao .seta-icon {
+            font-size: 2rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-comparacao.crescimento .seta-icon { color: var(--cor-sucesso); }
+        .card-comparacao.recuo .seta-icon { color: var(--cor-perigo); }
+        .card-comparacao.estavel .seta-icon { color: var(--cor-info); }
+        
+        .card-comparacao .valores-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 16px;
+            gap: 10px;
+        }
+        
+        .card-comparacao .valor-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .card-comparacao .valor-item .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--cor-texto-claro);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        
+        .card-comparacao .valor-item .numero {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--cor-texto);
+            line-height: 1;
+        }
+        
+        .card-comparacao .diferenca-badge {
+            text-align: center;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .card-comparacao.crescimento .diferenca-badge {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--cor-sucesso);
+        }
+        
+        .card-comparacao.recuo .diferenca-badge {
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--cor-perigo);
+        }
+        
+        .card-comparacao.estavel .diferenca-badge {
+            background: rgba(59, 130, 246, 0.12);
+            color: var(--cor-info);
+        }
+        
+        .resumo-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+        
+        .resumo-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--cor-borda);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .resumo-card .icon-big {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+        
+        .resumo-card.crescimento .icon-big { color: var(--cor-sucesso); }
+        .resumo-card.recuo .icon-big { color: var(--cor-perigo); }
+        .resumo-card.estavel .icon-big { color: var(--cor-info); }
+        
+        .resumo-card .numero {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        
+        .resumo-card .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--cor-texto-claro);
+            font-weight: 600;
+        }
+        
+        .paleta-niveis {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+        
+        .paleta-niveis .item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--cor-texto);
+        }
+        
+        .paleta-niveis .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content { padding: 20px 16px; }
+            .page-title { font-size: 1.6rem; }
+            .grafico-wrapper-vertical { height: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row g-0">
+        <!-- SIDEBAR -->
+        <div class="col-md-4 col-lg-3 sidebar" id="sidebar">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="fw-bold text-primary small" style="letter-spacing: 1px;">PAINEL DE CONTROLE</span>
+                <button class="btn btn-sm btn-light border" id="btnToggleSidebarInside" title="Recolher Menu">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+            <div class="logo-container">
+                <svg xmlns="http://www.w3.org/2000/svg" width="200" height="70" viewBox="0 0 220 75">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="220" height="75" rx="12" fill="url(#logoGrad)"/>
+                    <text x="20" y="35" font-family="Inter, sans-serif" font-size="20" fill="#ffffff" font-weight="800">ANÁLISE SAEB</text>
+                    <text x="20" y="55" font-family="Inter, sans-serif" font-size="11" fill="#93c5fd" font-weight="500">DESEMPENHO POR NÍVEIS</text>
+                </svg>
+            </div>
+
+            <hr class="text-muted" />
+            <div id="statusMsg" class="status-msg">🔄 Carregando dados automaticamente...</div>
+
+            <div id="controls">
+                <label class="select-label">Escola / Município</label>
+                <select id="escolaSelect" class="form-select shadow-sm"></select>
+
+                <label class="select-label">Etapa</label>
+                <select id="etapaSelect" class="form-select shadow-sm"></select>
+
+                <label class="select-label">Componente Curricular</label>
+                <select id="componenteSelect" class="form-select shadow-sm"></select>
+
+                <button id="btnPDF" class="btn btn-outline-primary w-100 mt-3">
+                    <i class="bi bi-file-earmark-pdf"></i> Gerar PDF com Cabeçalho
+                </button>
+            </div>
+            
+            <hr class="text-muted my-3" />
+            <div class="legend-box">
+                <strong class="text-dark d-block mb-2" style="font-size: 0.85rem;">LEGENDA DOS NÍVEIS:</strong>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--nivel-abaixo);"></div>
+                    <span>Abaixo do Básico</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--nivel-basico);"></div>
+                    <span>Básico</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--nivel-proficiente);"></div>
+                    <span>Proficiente</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--nivel-avancado);"></div>
+                    <span>Avançado</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="col-md-12 col-lg-9 main-content" id="mainContent">
+            <div class="mb-3">
+                <button class="btn btn-primary shadow-sm" id="btnToggleSidebar" title="Alternar Menu Lateral">
+                    <i class="bi bi-list fs-5"></i> Menu / Filtros
+                </button>
+            </div>
+
+            <div id="pdfHeaderBox" class="pdf-header-print">
+                <h3 id="pdfEscolaNome" class="fw-bold mb-1"></h3>
+                <p id="pdfDetalhesInfo" class="mb-0 text-light"></p>
+            </div>
+
+            <div class="page-header">
+                <h1 class="page-title">
+                    <span class="icon-wrapper"><i class="bi bi-bar-chart-line-fill"></i></span>
+                    Análise de Desempenho SAEB por Níveis
+                </h1>
+                <p class="page-subtitle" id="subtituloTopo">Visualização automática dos resultados por edição e evolução da aprendizagem.</p>
+            </div>
+
+            <div id="placeholder" class="loading-box">
+                <div class="spinner-border text-primary mb-2" role="status"></div>
+                <div>Lendo base de dados local (`Pasta_2.xlsx`), por favor aguarde...</div>
+            </div>
+
+            <!-- Abas -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="display:none;">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="desempenho-tab" data-bs-toggle="tab" data-bs-target="#desempenho" type="button" role="tab">
+                        <i class="bi bi-bar-chart-fill me-1"></i> Desempenho por Edição
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="distribuicao-tab" data-bs-toggle="tab" data-bs-target="#distribuicao" type="button" role="tab">
+                        <i class="bi bi-bar-chart-steps me-1"></i> Distribuição por Níveis
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="evolucao-tab" data-bs-toggle="tab" data-bs-target="#evolucao" type="button" role="tab">
+                        <i class="bi bi-graph-up me-1"></i> Evolução Histórica
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="comparacao-tab" data-bs-toggle="tab" data-bs-target="#comparacao" type="button" role="tab">
+                        <i class="bi bi-arrow-left-right me-1"></i> Comparação Temporal
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent" style="display:none;">
+                <!-- Aba 1: Desempenho por Edição (mantido) -->
+                <div class="tab-pane fade show active" id="desempenho" role="tabpanel"></div>
+
+                <!-- Aba 2: Distribuição por Níveis (BARRAS AGRUPADAS 0-10) -->
+                <div class="tab-pane fade" id="distribuicao" role="tabpanel">
+                    <div class="card-edicao">
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <div>
+                                <h5 class="mb-1 fw-bold">
+                                    <i class="bi bi-bar-chart-steps text-primary me-2"></i>
+                                    Distribuição Detalhada por Nível (0 a 10)
+                                </h5>
+                                <small class="text-muted">Percentual de alunos em cada nível de proficiência para cada edição (barras agrupadas)</small>
+                            </div>
+                            <button id="btnBaixarDistribuicao" class="btn btn-outline-success fw-semibold">
+                                <i class="bi bi-download"></i> Baixar Gráfico PNG
+                            </button>
+                        </div>
+                        
+                        <!-- Paleta de cores dos 11 níveis -->
+                        <div class="paleta-niveis" id="paletaNiveis"></div>
+                        
+                        <div class="grafico-wrapper-vertical mt-3">
+                            <canvas id="graficoDistribuicao"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aba 3: Evolução Histórica (mantido com Maracanaú) -->
+                <div class="tab-pane fade" id="evolucao" role="tabpanel">
+                    <div class="card-edicao">
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <div>
+                                <h5 class="mb-1 fw-bold">
+                                    <i class="bi bi-graph-up-arrow text-primary me-2"></i>
+                                    Evolução Histórica da Aprendizagem Adequada (%)
+                                </h5>
+                                <small class="text-muted">Evolução da escola selecionada em comparação com o Município de Maracanaú</small>
+                            </div>
+                            <button id="btnBaixarEvolucao" class="btn btn-outline-success fw-semibold">
+                                <i class="bi bi-download"></i> Baixar Gráfico PNG
+                            </button>
+                        </div>
+                        <div class="info-box comparativo">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            <strong>Comparativo Municipal:</strong> A linha tracejada roxa representa o percentual de aprendizagem adequada do <strong>Município de Maracanaú</strong> para a mesma etapa e componente.
+                        </div>
+                        <div style="height:450px;">
+                            <canvas id="graficoEvolucao"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOVA ABA 4: Comparação Temporal -->
+                <div class="tab-pane fade" id="comparacao" role="tabpanel">
+                    <div class="card-edicao">
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <div>
+                                <h5 class="mb-1 fw-bold">
+                                    <i class="bi bi-arrow-left-right text-primary me-2"></i>
+                                    Comparação Temporal da Aprendizagem Adequada
+                                </h5>
+                                <small class="text-muted">Análise de crescimento, recuo ou estabilidade entre edições consecutivas</small>
+                            </div>
+                            <button id="btnBaixarComparacao" class="btn btn-outline-success fw-semibold">
+                                <i class="bi bi-download"></i> Baixar Comparação PNG
+                            </button>
+                        </div>
+                        
+                        <div id="containerComparacao"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tipos de Aprendizado -->
+            <div class="learning-types-card">
+                <h5><i class="bi bi-lightbulb-fill text-warning me-2"></i>Tipos de Aprendizado</h5>
+                <ul class="list-unstyled mb-2">
+                    <li><strong>Avançado:</strong> Aprendizado além da expectativa. Recomenda-se atividades desafiadoras.</li>
+                    <li><strong>Proficiente:</strong> Os alunos estão preparados para continuar os estudos. Recomenda-se atividades de aprofundamento.</li>
+                    <li><strong>Básico:</strong> Os alunos precisam melhorar. Sugere-se atividades de reforço.</li>
+                    <li><strong>Abaixo do Básico:</strong> Apresentaram pouquíssimo aprendizado. É necessária a recuperação de conteúdos.</li>
+                </ul>
+                <p class="text-muted small mb-0">Fonte: <a href="https://qedu.org.br/" target="_blank" class="text-decoration-none">https://qedu.org.br/</a> – INEP, 2023.</p>
+            </div>
+
+            <footer class="footer">
+                © 2026 Desenvolvido para análise pedagógica – Dados INEP / QEdu
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let dados = [];
+    let escolasMap = new Map();
+    let dadosFiltrados = [];
+    let graficosBarras = [];
+    let graficoEvolucao = null;
+    let graficoDistribuicao = null;
+
+    const CAMINHO_ARQUIVO = "Pasta_2.xlsx";
+
+    Chart.register(ChartDataLabels);
+
+    // Paleta de cores para os 11 níveis (Spectral do ColorBrewer - sequencial vermelho→verde)
+    const CORES_NIVEIS = {
+        0:  '#9e0142', // Vermelho muito escuro
+        1:  '#d53e4f', // Vermelho
+        2:  '#f46d43', // Vermelho-laranja
+        3:  '#fdae61', // Laranja claro
+        4:  '#fee08b', // Amarelo claro
+        5:  '#ffffbf', // Amarelo pálido
+        6:  '#d9ef8b', // Verde-amarelado
+        7:  '#a6d96a', // Verde claro
+        8:  '#66bd63', // Verde médio
+        9:  '#1a9850', // Verde forte
+        10: '#006837'  // Verde muito escuro
+    };
+    
+    // Cor de texto ideal para cada nível (baseado no contraste)
+    const TEXTOS_NIVEIS = {
+        0: 'white', 1: 'white', 2: 'black', 3: 'black', 4: 'black',
+        5: 'black', 6: 'black', 7: 'black', 8: 'white', 9: 'white', 10: 'white'
+    };
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        if (sidebar.style.display === 'none') {
+            sidebar.style.display = 'block';
+            mainContent.className = "col-md-8 col-lg-9 main-content";
+        } else {
+            sidebar.style.display = 'none';
+            mainContent.className = "col-md-12 col-lg-12 main-content";
+        }
+    }
+
+    document.getElementById('btnToggleSidebar').addEventListener('click', toggleSidebar);
+    document.getElementById('btnToggleSidebarInside').addEventListener('click', toggleSidebar);
+
+    function extrairNumeroEtapa(etapaStr) {
+        if (!etapaStr) return null;
+        const m = String(etapaStr).match(/\d+/);
+        return m ? parseInt(m[0], 10) : null;
+    }
+
+    function mapComponente(nomeCompleto) {
+        if (!nomeCompleto) return "";
+        const up = String(nomeCompleto).trim().toUpperCase();
+        if (up === "LÍNGUA PORTUGUESA" || up === "LP") return "LP";
+        if (up === "MATEMÁTICA" || up === "MT") return "MT";
+        return nomeCompleto;
+    }
+
+    // LÓGICA ORIGINAL DE AGRUPAMENTO (preservada para abas Desempenho e Evolução)
+    function agruparNiveis(etapa, componente, valores) {
+        let grupos = {};
+        const comp = mapComponente(componente);
+        if (etapa === 5 && comp === "LP") {
+            grupos = {'ABAIXO DO BÁSICO': [0,1], 'BÁSICO':[2,3], 'PROFICIENTE':[4,5], 'AVANÇADO':[6,7,8,9]};
+        } else if (etapa === 5 && comp === "MT") {
+            grupos = {'ABAIXO DO BÁSICO': [0,1,2], 'BÁSICO':[3,4], 'PROFICIENTE':[5,6], 'AVANÇADO':[7,8,9]};
+        } else if (etapa === 9 && comp === "LP") {
+            grupos = {'ABAIXO DO BÁSICO': [0], 'BÁSICO':[1,2,3], 'PROFICIENTE':[4,5], 'AVANÇADO':[6,7,8]};
+        } else if (etapa === 9 && comp === "MT") {
+            grupos = {'ABAIXO DO BÁSICO':[0,1], 'BÁSICO':[2,3,4], 'PROFICIENTE':[5,6], 'AVANÇADO':[7,8,9]};
+        } else if (etapa === 3 && comp === "LP") {
+            grupos = {'ABAIXO DO BÁSICO':[0,1], 'BÁSICO':[2,3], 'PROFICIENTE':[4,5,6], 'AVANÇADO':[7,8]};
+        } else if (etapa === 3 && (comp === "MT" || comp === "IABAIXO DO BÁSICO")) {
+            grupos = {'ABAIXO DO BÁSICO':[0,1,2], 'BÁSICO':[3,4,5], 'PROFICIENTE':[6,7], 'AVANÇADO':[8,9,10]};
+        } else {
+            grupos = {'ABAIXO DO BÁSICO': [0,1,2], 'BÁSICO':[3,4], 'PROFICIENTE':[5,6], 'AVANÇADO':[7,8,9,10]};
+        }
+
+        const cores = {
+            'ABAIXO DO BÁSICO': '#FF4136',
+            'BÁSICO': '#FF851B',
+            'PROFICIENTE': '#B0E57C',
+            'AVANÇADO': '#006400'
+        };
+        
+        const textColors = {
+            'ABAIXO DO BÁSICO': 'white',
+            'BÁSICO': 'black',
+            'PROFICIENTE': 'black',
+            'AVANÇADO': 'white'
+        };
+
+        const categorias = [], valoresCategorias = [], coresList = [], textColorsList = [];
+
+        for (let cat in grupos) {
+            let indices = grupos[cat];
+            let soma = 0;
+            for (let i of indices) {
+                if (i < valores.length) soma += (valores[i] || 0);
+            }
+            categorias.push(cat);
+            valoresCategorias.push(soma);
+            coresList.push(cores[cat] || '#888888');
+            textColorsList.push(textColors[cat] || 'black');
+        }
+
+        return { categorias, valoresCategorias, cores: coresList, textColors: textColorsList };
+    }
+
+    function corCardPorPercentual(pct) {
+        if (pct <= 25) return { bg: "#FF4136", text: "white" };
+        if (pct <= 50) return { bg: "#FF851B", text: "black" };
+        if (pct <= 75) return { bg: "#B0E57C", text: "black" };
+        return { bg: "#006400", text: "white" };
+    }
+
+    function carregarArquivoLocal() {
+        fetch(CAMINHO_ARQUIVO)
+            .then(response => {
+                if (!response.ok) throw new Error("Arquivo não encontrado na pasta local.");
+                return response.arrayBuffer();
+            })
+            .then(buffer => {
+                const workbook = XLSX.read(new Uint8Array(buffer), { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const rawData = XLSX.utils.sheet_to_json(worksheet);
+                
+                if (rawData.length === 0) throw new Error("O arquivo está vazio.");
+                processarDados(rawData);
+            })
+            .catch(err => {
+                fetch(CAMINHO_ARQUIVO)
+                    .then(res => res.text())
+                    .then(text => {
+                        const lines = text.split('\n').filter(l => l.trim() !== '');
+                        if (lines.length === 0) throw new Error("Arquivo vazio");
+                        const sep = lines[0].includes(';') ? ';' : (lines[0].includes('\t') ? '\t' : ',');
+                        const headers = lines[0].split(sep).map(h => h.trim());
+                        const rawData = [];
+                        for (let i = 1; i < lines.length; i++) {
+                            const cols = lines[i].split(sep);
+                            const obj = {};
+                            headers.forEach((h, idx) => {
+                                obj[h] = cols[idx] ? cols[idx].trim() : '';
+                            });
+                            rawData.push(obj);
+                        }
+                        processarDados(rawData);
+                    })
+                    .catch(err2 => {
+                        document.getElementById('statusMsg').innerHTML = `<span class="text-danger">❌ Erro: ${err.message}</span>`;
+                        document.getElementById('statusMsg').className = 'status-msg error';
+                        document.getElementById('placeholder').innerHTML = `<div class="alert alert-danger">Erro ao carregar '${CAMINHO_ARQUIVO}'. Coloque-o na mesma pasta do arquivo HTML.</div>`;
+                    });
+            });
+    }
+
+    function processarDados(rawData) {
+        dados = [];
+        escolasMap.clear();
+
+        rawData.forEach(row => {
+            const obj = {};
+            Object.keys(row).forEach(k => { obj[k.trim()] = row[k]; });
+
+            let inep = obj['INEP'];
+            if (inep !== undefined && inep !== null) {
+                if (typeof inep === 'number') inep = String(Math.floor(inep));
+                else inep = String(inep).trim();
+            } else inep = '';
+            if (!inep) return;
+
+            const nome = (obj['NO_MUNICIPIO'] || obj['ESCOLA'] || 'Escola sem nome').trim();
+            escolasMap.set(inep, nome);
+
+            const etapaStr = obj['ETAPA'] || '';
+            const etapaNum = extrairNumeroEtapa(etapaStr);
+            if (etapaNum === null) return;
+
+            const componente = (obj['COMP_ CURRICULAR'] || obj['COMPONENTE'] || '').trim();
+            if (!componente) return;
+
+            const edicao = String(obj['EDIÇÃO'] || obj['EDICAO'] || '').trim();
+
+            const niveis = [];
+            for (let i = 0; i <= 10; i++) {
+                const col = `Nivel ${i}`;
+                let val = obj[col];
+                if (val === undefined || val === null || val === '-' || val === '') val = 0;
+                val = parseFloat(val);
+                if (isNaN(val)) val = 0;
+                niveis.push(val);
+            }
+
+            dados.push({ inep, nome, etapaStr, etapaNum, componente, edicao, niveis });
+        });
+
+        if (dados.length === 0) {
+            document.getElementById('statusMsg').innerHTML = '<span>Nenhum dado válido encontrado.</span>';
+            document.getElementById('statusMsg').className = 'status-msg error';
+            return;
+        }
+
+        document.getElementById('statusMsg').innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> ${dados.length} registros carregados!`;
+        document.getElementById('statusMsg').className = 'status-msg success';
+        document.getElementById('placeholder').style.display = 'none';
+        document.querySelector('.nav-tabs').style.display = 'flex';
+        document.getElementById('myTabContent').style.display = 'block';
+
+        popularEscolas();
+
+        const escolaSelect = document.getElementById('escolaSelect');
+        if (escolaSelect.options.length > 0) {
+            escolaSelect.selectedIndex = 0;
+            const primeiroInep = escolaSelect.value;
+            popularEtapas(primeiroInep);
+            const etapaSelect = document.getElementById('etapaSelect');
+            if (etapaSelect.options.length > 0) {
+                etapaSelect.selectedIndex = 0;
+                popularComponentes(primeiroInep, parseInt(etapaSelect.value, 10));
+                const compSelect = document.getElementById('componenteSelect');
+                if (compSelect.options.length > 0) compSelect.selectedIndex = 0;
+            }
+        }
+        
+        renderizarPaletaNiveis();
+        atualizarTudo();
+    }
+
+    function popularEscolas() {
+        const select = document.getElementById('escolaSelect');
+        select.innerHTML = '';
+        const sorted = Array.from(escolasMap.entries()).sort((a,b) => a[1].localeCompare(b[1]));
+        sorted.forEach(([inep, nome]) => {
+            const opt = document.createElement('option');
+            opt.value = inep;
+            opt.textContent = `${nome} (${inep})`;
+            select.appendChild(opt);
+        });
+    }
+
+    function popularEtapas(inep) {
+        const select = document.getElementById('etapaSelect');
+        select.innerHTML = '';
+        const etapas = new Set();
+        dados.filter(d => d.inep === inep).forEach(d => etapas.add(d.etapaNum));
+        const sorted = Array.from(etapas).sort((a,b) => a - b);
+        sorted.forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = e;
+            opt.textContent = `${e}º Ano`;
+            select.appendChild(opt);
+        });
+    }
+
+    function popularComponentes(inep, etapa) {
+        const select = document.getElementById('componenteSelect');
+        select.innerHTML = '';
+        const comps = new Set();
+        dados.filter(d => d.inep === inep && d.etapaNum === etapa).forEach(d => comps.add(d.componente));
+        const sorted = Array.from(comps).sort();
+        sorted.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            select.appendChild(opt);
+        });
+    }
+
+    function atualizarTudo() {
+        const inep = document.getElementById('escolaSelect').value;
+        const etapa = parseInt(document.getElementById('etapaSelect').value, 10);
+        const componente = document.getElementById('componenteSelect').value;
+
+        if (!inep || isNaN(etapa) || !componente) return;
+
+        const nomeEscola = escolasMap.get(inep) || '';
+        document.getElementById('subtituloTopo').innerHTML = `Escola / Município: <strong>${nomeEscola}</strong> (INEP: ${inep}) | Etapa: ${etapa}º Ano | Componente: ${componente}`;
+
+        dadosFiltrados = dados.filter(d =>
+            d.inep === inep && d.etapaNum === etapa && d.componente === componente
+        );
+
+        dadosFiltrados.sort((a,b) => b.edicao.localeCompare(a.edicao));
+
+        renderizarDesempenho();
+        renderizarDistribuicao();
+        renderizarEvolucao();
+        renderizarComparacaoTemporal();
+    }
+
+    // === ABA 1: Desempenho por Edição (gráficos individuais horizontais - mantido) ===
+    function renderizarDesempenho() {
+        const container = document.getElementById('desempenho');
+        container.innerHTML = '';
+
+        graficosBarras.forEach(g => { if (g.chart) g.chart.destroy(); });
+        graficosBarras = [];
+
+        if (dadosFiltrados.length === 0) {
+            container.innerHTML = '<div class="alert alert-warning">Nenhum dado encontrado para esta seleção.</div>';
+            return;
+        }
+
+        const inepAtual = document.getElementById('escolaSelect').value;
+        const nomeEscola = escolasMap.get(inepAtual) || 'escola';
+
+        dadosFiltrados.forEach((d, idx) => {
+            const { categorias, valoresCategorias, cores, textColors } = agruparNiveis(d.etapaNum, d.componente, d.niveis);
+            const adequado = (valoresCategorias[2] || 0) + (valoresCategorias[3] || 0);
+            const adequadoArredondado = Math.round(adequado);
+            const { bg, text } = corCardPorPercentual(adequadoArredondado);
+
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card-edicao';
+            cardDiv.id = `card-edicao-${idx}`;
+
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'd-flex justify-content-between align-items-center mb-3';
+            
+            const title = document.createElement('h5');
+            title.className = 'm-0 fw-bold';
+            title.innerHTML = `<i class="bi bi-calendar-event text-primary me-2"></i>Edição: ${d.edicao}`;
+            headerDiv.appendChild(title);
+
+            const btnDownload = document.createElement('button');
+            btnDownload.className = 'btn btn-outline-secondary fw-semibold';
+            btnDownload.innerHTML = '<i class="bi bi-download"></i> Baixar Gráfico';
+            btnDownload.onclick = function() {
+                const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
+                const nomeArquivo = `${nomeLimpo}_${inepAtual}_Edicao_${d.edicao}.png`;
+                const canvasEl = document.getElementById(`chart-${idx}`);
+                const image = canvasEl.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = image; a.download = nomeArquivo; a.click();
+            };
+            headerDiv.appendChild(btnDownload);
+            cardDiv.appendChild(headerDiv);
+
+            const row = document.createElement('div');
+            row.className = 'row align-items-center g-3';
+
+            const colGrafico = document.createElement('div');
+            colGrafico.className = 'col-md-9';
+            const canvas = document.createElement('canvas');
+            canvas.id = `chart-${idx}`;
+            canvas.className = 'grafico-wrapper';
+            colGrafico.appendChild(canvas);
+            row.appendChild(colGrafico);
+
+            const colCard = document.createElement('div');
+            colCard.className = 'col-md-3 text-center';
+            const cardAprend = document.createElement('div');
+            cardAprend.className = 'card-aprendizagem';
+            cardAprend.style.backgroundColor = bg;
+            cardAprend.style.color = text;
+            cardAprend.innerHTML = `
+                <h6>Aprendizagem Adequada</h6>
+                <div class="valor">${adequadoArredondado}%</div>
+            `;
+            colCard.appendChild(cardAprend);
+            row.appendChild(colCard);
+
+            cardDiv.appendChild(row);
+            container.appendChild(cardDiv);
+
+            const ctx = canvas.getContext('2d');
+            const datasets = categorias.map((cat, i) => ({
+                label: cat,
+                data: [valoresCategorias[i]],
+                backgroundColor: cores[i],
+                borderColor: '#ffffff',
+                borderWidth: 1.5,
+                borderRadius: 4
+            }));
+
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: [''], datasets },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { boxWidth: 14, font: { size: 11, weight: '600' } } },
+                        datalabels: {
+                            color: function(context) { return textColors[context.datasetIndex] || '#fff'; },
+                            font: { weight: 'bold', size: 14 },
+                            formatter: function(value) {
+                                let rounded = Math.round(value);
+                                return rounded >= 3 ? `${rounded}%` : '';
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return ` ${context.dataset.label}: ${Math.round(context.raw)}%`; }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%', stepSize: 20 }, grid: { display: false } },
+                        y: { stacked: true, display: false, grid: { display: false } }
+                    }
+                }
+            });
+
+            graficosBarras.push({ chart, edicao: d.edicao, adequado });
+        });
+    }
+
+    // === NOVA ABA 2: Distribuição por Níveis (BARRAS AGRUPADAS 0-10) ===
+    function renderizarDistribuicao() {
+        if (graficoDistribuicao) {
+            graficoDistribuicao.destroy();
+            graficoDistribuicao = null;
+        }
+
+        const canvas = document.getElementById('graficoDistribuicao');
+        if (!canvas) return;
+
+        if (dadosFiltrados.length === 0) return;
+
+        // Ordenar cronologicamente
+        const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
+        const edicoes = dadosCron.map(d => d.edicao);
+        
+        // Criar 11 datasets (um para cada nível 0-10)
+        const datasets = [];
+        for (let nivel = 0; nivel <= 10; nivel++) {
+            const dadosNivel = dadosCron.map(d => {
+                const valor = d.niveis[nivel] !== undefined ? d.niveis[nivel] : 0;
+                return Math.round(valor * 100) / 100; // 2 casas decimais
+            });
+            
+            datasets.push({
+                label: `Nível ${nivel}`,
+                data: dadosNivel,
+                backgroundColor: CORES_NIVEIS[nivel],
+                borderColor: '#ffffff',
+                borderWidth: 1,
+                borderRadius: 3,
+                borderSkipped: false
+            });
+        }
+
+        const ctx = canvas.getContext('2d');
+        graficoDistribuicao = new Chart(ctx, {
+            type: 'bar',
+            data: { labels: edicoes, datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            boxHeight: 12,
+                            font: { size: 10, weight: '600' },
+                            padding: 8,
+                            usePointStyle: true,
+                            pointStyle: 'rect'
+                        }
+                    },
+                    datalabels: {
+                        display: function(context) {
+                            // Só exibe rótulo se a barra for suficientemente alta (> 3%)
+                            return context.dataset.data[context.dataIndex] >= 3;
+                        },
+                        color: function(context) {
+                            return TEXTOS_NIVEIS[context.datasetIndex] || 'black';
+                        },
+                        font: { weight: 'bold', size: 9 },
+                        anchor: 'center',
+                        align: 'center',
+                        formatter: function(value) {
+                            const rounded = Math.round(value);
+                            return rounded >= 3 ? `${rounded}%` : '';
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.dataset.label}: ${context.raw.toFixed(2)}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 13, weight: '700' } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: v => v + '%',
+                            font: { size: 11 }
+                        },
+                        grid: { color: '#f1f5f9' },
+                        title: {
+                            display: true,
+                            text: 'Percentual de Estudantes (%)',
+                            font: { size: 12, weight: '600' }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderizarPaletaNiveis() {
+        const container = document.getElementById('paletaNiveis');
+        container.innerHTML = '';
+        for (let i = 0; i <= 10; i++) {
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.innerHTML = `<span class="dot" style="background:${CORES_NIVEIS[i]}"></span>Nível ${i}`;
+            container.appendChild(item);
+        }
+    }
+
+    // === ABA 3: Evolução Histórica (mantido com Maracanaú) ===
+    function renderizarEvolucao() {
+        if (graficoEvolucao) {
+            graficoEvolucao.destroy();
+            graficoEvolucao = null;
+        }
+
+        const canvas = document.getElementById('graficoEvolucao');
+        if (!canvas) return;
+        if (dadosFiltrados.length === 0) return;
+
+        const inepAtual = document.getElementById('escolaSelect').value;
+        const etapaAtual = parseInt(document.getElementById('etapaSelect').value, 10);
+        const componenteAtual = document.getElementById('componenteSelect').value;
+        const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
+        
+        const isMaracanauSelecionado = nomeEscola.toUpperCase().includes('MARACANAÚ') || nomeEscola.toUpperCase().includes('MARACANAU');
+
+        const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
+        const edicoes = dadosCron.map(d => d.edicao);
+        const adequadosEscola = dadosCron.map(d => {
+            const { valoresCategorias } = agruparNiveis(d.etapaNum, d.componente, d.niveis);
+            return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
+        });
+
+        const dadosMaracanau = dados.filter(d => 
+            (d.nome.toUpperCase().includes('MARACANAÚ') || d.nome.toUpperCase().includes('MARACANAU')) &&
+            d.etapaNum === etapaAtual && d.componente === componenteAtual
+        ).sort((a, b) => a.edicao.localeCompare(b.edicao));
+
+        const adequadosMaracanau = edicoes.map(ed => {
+            const encontrado = dadosMaracanau.find(d => d.edicao === ed);
+            if (!encontrado) return null;
+            const { valoresCategorias } = agruparNiveis(encontrado.etapaNum, encontrado.componente, encontrado.niveis);
+            return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
+        });
+
+        const datasets = [{
+            label: nomeEscola,
+            data: adequadosEscola,
+            borderColor: '#196F3D',
+            backgroundColor: 'rgba(25, 111, 61, 0.1)',
+            tension: 0.25,
+            pointBackgroundColor: '#196F3D',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            fill: true,
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            borderWidth: 3
+        }];
+
+        if (!isMaracanauSelecionado && dadosMaracanau.length > 0) {
+            datasets.push({
+                label: 'Maracanaú (Município)',
+                data: adequadosMaracanau,
+                borderColor: '#8b5cf6',
+                backgroundColor: 'rgba(139, 92, 246, 0.05)',
+                tension: 0.25,
+                pointBackgroundColor: '#8b5cf6',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                borderDash: [8, 5],
+                fill: false,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                borderWidth: 2.5
+            });
+        }
+
+        const ctx = canvas.getContext('2d');
+        graficoEvolucao = new Chart(ctx, {
+            type: 'line',
+            data: { labels: edicoes, datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        position: 'top', 
+                        labels: { font: { size: 12, weight: '600' }, padding: 15, usePointStyle: true, pointStyle: 'circle' } 
+                    },
+                    datalabels: {
+                        align: 'top',
+                        anchor: 'end',
+                        color: function(context) { return context.dataset.borderColor; },
+                        font: { weight: 'bold', size: 12 },
+                        backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                        borderRadius: 4,
+                        padding: 4,
+                        formatter: function(value) { return value !== null ? `${value}%` : ''; },
+                        offset: 8
+                    },
+                    tooltip: {
+                        callbacks: { label: context => ` ${context.dataset.label}: ${context.raw}%` }
+                    }
+                },
+                scales: {
+                    y: { min: 0, max: 100, ticks: { callback: v => v + '%', font: { size: 12 } }, grid: { color: '#f1f5f9' } },
+                    x: { grid: { display: false }, ticks: { font: { size: 13, weight: '600' } } }
+                }
+            }
+        });
+    }
+
+    // === NOVA ABA 4: Comparação Temporal ===
+    function renderizarComparacaoTemporal() {
+        const container = document.getElementById('containerComparacao');
+        container.innerHTML = '';
+
+        if (dadosFiltrados.length < 2) {
+            container.innerHTML = `
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    É necessário ter dados de pelo menos <strong>duas edições</strong> para realizar a comparação temporal.
+                </div>
+            `;
+            return;
+        }
+
+        // Ordenar cronologicamente (crescente)
+        const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
+        
+        // Calcular Aprendizagem Adequada para cada edição
+        const edicoesComAdequada = dadosCron.map(d => {
+            const { valoresCategorias } = agruparNiveis(d.etapaNum, d.componente, d.niveis);
+            return {
+                edicao: d.edicao,
+                adequada: Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0))
+            };
+        });
+
+        // Calcular resumos
+        let crescimentos = 0, recuos = 0, estaveis = 0;
+        const comparacoes = [];
+        
+        for (let i = 1; i < edicoesComAdequada.length; i++) {
+            const anterior = edicoesComAdequada[i-1];
+            const atual = edicoesComAdequada[i];
+            const diferenca = atual.adequada - anterior.adequada;
+            
+            let tipo, classe, seta, textoDif;
+            if (diferenca > 0) {
+                tipo = 'crescimento'; classe = 'crescimento';
+                seta = '↑'; crescimentos++;
+                textoDif = `+${diferenca.toFixed(1)} p.p.`;
+            } else if (diferenca < 0) {
+                tipo = 'recuo'; classe = 'recuo';
+                seta = '↓'; recuos++;
+                textoDif = `${diferenca.toFixed(1)} p.p.`;
+            } else {
+                tipo = 'estavel'; classe = 'estavel';
+                seta = '→'; estaveis++;
+                textoDif = `0 p.p.`;
+            }
+            
+            comparacoes.push({
+                anterior, atual, diferenca, tipo, classe, seta, textoDif
+            });
+        }
+
+        // Cards de resumo (totais)
+        const resumoHtml = `
+            <div class="resumo-cards">
+                <div class="resumo-card crescimento">
+                    <div class="icon-big"><i class="bi bi-graph-up-arrow"></i></div>
+                    <div class="numero">${crescimentos}</div>
+                    <div class="label">Crescimentos</div>
+                </div>
+                <div class="resumo-card recuo">
+                    <div class="icon-big"><i class="bi bi-graph-down-arrow"></i></div>
+                    <div class="numero">${recuos}</div>
+                    <div class="label">Recuos</div>
+                </div>
+                <div class="resumo-card estavel">
+                    <div class="icon-big"><i class="bi bi-dash-square"></i></div>
+                    <div class="numero">${estaveis}</div>
+                    <div class="label">Estáveis</div>
+                </div>
+                <div class="resumo-card" style="border-left: 4px solid var(--cor-primaria);">
+                    <div class="icon-big" style="color: var(--cor-primaria);"><i class="bi bi-calendar-range"></i></div>
+                    <div class="numero">${edicoesComAdequada.length}</div>
+                    <div class="label">Edições Analisadas</div>
+                </div>
+            </div>
+        `;
+
+        // Comparação primeira vs última edição (destaque)
+        const primeira = edicoesComAdequada[0];
+        const ultima = edicoesComAdequada[edicoesComAdequada.length - 1];
+        const diferencaTotal = ultima.adequada - primeira.adequada;
+        let classeTotal, setaTotal, textoTotal;
+        if (diferencaTotal > 0) {
+            classeTotal = 'crescimento'; setaTotal = '↑';
+            textoTotal = `+${diferencaTotal.toFixed(1)} p.p.`;
+        } else if (diferencaTotal < 0) {
+            classeTotal = 'recuo'; setaTotal = '↓';
+            textoTotal = `${diferencaTotal.toFixed(1)} p.p.`;
+        } else {
+            classeTotal = 'estavel'; setaTotal = '→';
+            textoTotal = `0 p.p.`;
+        }
+
+        const destaqueHtml = `
+            <div class="card-comparacao ${classeTotal}" style="margin-bottom: 24px; border-width: 2px;">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-warning text-dark"><i class="bi bi-star-fill"></i> Visão Geral</span>
+                </div>
+                <div style="text-align:center; margin-bottom:10px;">
+                    <small class="text-uppercase fw-bold text-muted">Comparação ${primeira.edicao} → ${ultima.edicao}</small>
+                </div>
+                <div class="periodo">
+                    <div class="edicao-box">${primeira.edicao}</div>
+                    <div class="seta-icon">${setaTotal}</div>
+                    <div class="edicao-box">${ultima.edicao}</div>
+                </div>
+                <div class="valores-row">
+                    <div class="valor-item">
+                        <div class="label">Inicial</div>
+                        <div class="numero">${primeira.adequada}%</div>
+                    </div>
+                    <div class="valor-item">
+                        <div class="label">Final</div>
+                        <div class="numero">${ultima.adequada}%</div>
+                    </div>
+                </div>
+                <div class="diferenca-badge">
+                    <i class="bi ${diferencaTotal > 0 ? 'bi-arrow-up-right-circle-fill' : diferencaTotal < 0 ? 'bi-arrow-down-right-circle-fill' : 'bi-dash-circle-fill'}"></i>
+                    <span>Diferença Total: <strong>${textoTotal}</strong></span>
+                </div>
+            </div>
+        `;
+
+        // Grid de comparações consecutivas
+        let comparacoesHtml = '<div class="comparacao-grid">';
+        comparacoes.forEach(c => {
+            comparacoesHtml += `
+                <div class="card-comparacao ${c.classe}">
+                    <div class="periodo">
+                        <div class="edicao-box">${c.anterior.edicao}</div>
+                        <div class="seta-icon">${c.seta}</div>
+                        <div class="edicao-box">${c.atual.edicao}</div>
+                    </div>
+                    <div class="valores-row">
+                        <div class="valor-item">
+                            <div class="label">Anterior</div>
+                            <div class="numero">${c.anterior.adequada}%</div>
+                        </div>
+                        <div class="valor-item">
+                            <div class="label">Seguinte</div>
+                            <div class="numero">${c.atual.adequada}%</div>
+                        </div>
+                    </div>
+                    <div class="diferenca-badge">
+                        <i class="bi ${c.diferenca > 0 ? 'bi-arrow-up-right-circle-fill' : c.diferenca < 0 ? 'bi-arrow-down-right-circle-fill' : 'bi-dash-circle-fill'}"></i>
+                        <span><strong>${c.textoDif}</strong></span>
+                    </div>
+                </div>
+            `;
+        });
+        comparacoesHtml += '</div>';
+
+        container.innerHTML = resumoHtml + destaqueHtml + comparacoesHtml;
+    }
+
+    // Download PNG - Distribuição
+    document.getElementById('btnBaixarDistribuicao').addEventListener('click', function() {
+        if (!graficoDistribuicao) return;
+        const inepAtual = document.getElementById('escolaSelect').value;
+        const nomeEscola = escolasMap.get(inepAtual) || 'escola';
+        const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
+        const nomeArquivo = `${nomeLimpo}_${inepAtual}_Distribuicao_Niveis_0a10.png`;
+        
+        const canvasEl = document.getElementById('graficoDistribuicao');
+        const image = canvasEl.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = image; a.download = nomeArquivo; a.click();
+    });
+
+    // Download PNG - Evolução
+    document.getElementById('btnBaixarEvolucao').addEventListener('click', function() {
+        if (!graficoEvolucao) return;
+        const inepAtual = document.getElementById('escolaSelect').value;
+        const nomeEscola = escolasMap.get(inepAtual) || 'escola';
+        const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
+        const nomeArquivo = `${nomeLimpo}_${inepAtual}_Evolucao_SAEB.png`;
+        
+        const canvasEl = document.getElementById('graficoEvolucao');
+        const image = canvasEl.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = image; a.download = nomeArquivo; a.click();
+    });
+
+    // Download PNG - Comparação Temporal (usa html2canvas)
+    document.getElementById('btnBaixarComparacao').addEventListener('click', function() {
+        const container = document.getElementById('containerComparacao');
+        if (!container || container.children.length === 0) return;
+        
+        const inepAtual = document.getElementById('escolaSelect').value;
+        const nomeEscola = escolasMap.get(inepAtual) || 'escola';
+        const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
+        const nomeArquivo = `${nomeLimpo}_${inepAtual}_Comparacao_Temporal.png`;
+        
+        html2canvas(container, { 
+            backgroundColor: '#ffffff', 
+            scale: 2,
+            useCORS: true 
+        }).then(canvas => {
+            const image = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = image; a.download = nomeArquivo; a.click();
+        });
+    });
+
+    document.getElementById('escolaSelect').addEventListener('change', function() {
+        const inep = this.value;
+        if (inep) {
+            popularEtapas(inep);
+            const etapaSelect = document.getElementById('etapaSelect');
+            if (etapaSelect.options.length > 0) {
+                etapaSelect.selectedIndex = 0;
+                popularComponentes(inep, parseInt(etapaSelect.value, 10));
+                const compSelect = document.getElementById('componenteSelect');
+                if (compSelect.options.length > 0) compSelect.selectedIndex = 0;
+                atualizarTudo();
+            }
+        }
+    });
+
+    document.getElementById('etapaSelect').addEventListener('change', function() {
+        const inep = document.getElementById('escolaSelect').value;
+        const etapa = parseInt(this.value, 10);
+        if (inep && !isNaN(etapa)) {
+            popularComponentes(inep, etapa);
+            const compSelect = document.getElementById('componenteSelect');
+            if (compSelect.options.length > 0) compSelect.selectedIndex = 0;
+            atualizarTudo();
+        }
+    });
+
+    document.getElementById('componenteSelect').addEventListener('change', function() {
+        atualizarTudo();
+    });
+
+    // Geração de PDF
+    document.getElementById('btnPDF').addEventListener('click', function() {
+        const inepAtual = document.getElementById('escolaSelect').value;
+        const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
+        const etapaVal = document.getElementById('etapaSelect').value;
+        const compVal = document.getElementById('componenteSelect').value;
+
+        const headerBox = document.getElementById('pdfHeaderBox');
+        document.getElementById('pdfEscolaNome').textContent = `Instituição / Município: ${nomeEscola}`;
+        document.getElementById('pdfDetalhesInfo').textContent = `Código INEP: ${inepAtual} | Etapa: ${etapaVal}º Ano | Componente: ${compVal}`;
+        headerBox.style.display = 'block';
+
+        const content = document.getElementById('mainContent');
+        html2canvas(content, { scale: 2, useCORS: true }).then(canvas => {
+            headerBox.style.display = 'none';
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'pt', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            let heightLeft = pdfHeight;
+            let position = 0;
+            
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+            heightLeft -= pdf.internal.pageSize.getHeight();
+            while (heightLeft > 0) {
+                position -= pdf.internal.pageSize.getHeight();
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+                heightLeft -= pdf.internal.pageSize.getHeight();
+            }
+            const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
+            pdf.save(`Relatorio_SAEB_${nomeLimpo}_${inepAtual}.pdf`);
+        }).catch(err => {
+            headerBox.style.display = 'none';
+            alert('Erro ao gerar PDF: ' + err.message);
+        });
+    });
+
+    document.querySelector('.nav-tabs').style.display = 'none';
+    document.getElementById('myTabContent').style.display = 'none';
+
+    window.addEventListener('DOMContentLoaded', () => {
+        carregarArquivoLocal();
+    });
+</script>
+</body>
+</html>
