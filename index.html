@@ -683,11 +683,11 @@
                     </div>
                 </div>
 
-                <!-- Aba 4: Evolução Histórica (2 GRÁFICOS: Soares e TPE) -->
+                <!-- Aba 4: Evolução Histórica (COM BRASIL E CEARÁ) -->
                 <div class="tab-pane fade" id="evolucao" role="tabpanel">
                     <div class="info-box comparativo mb-3">
                         <i class="bi bi-info-circle-fill me-2"></i>
-                        <strong>Nota Metodológica:</strong> O gráfico da esquerda mostra a divisão em 4 níveis (Soares, 2009), com cores escuras para evitar sobreposição visual. O gráfico da direita mostra a classificação agregada de 3 níveis (Todos Pela Educação), incluindo o comparativo com o Estado do Ceará.
+                        <strong>Nota Metodológica:</strong> Os gráficos abaixo comparam o desempenho da seleção atual com as referências do <strong>Estado do Ceará</strong> e do <strong>Brasil</strong>. O gráfico da esquerda detalha a divisão em 4 níveis (Soares, 2009), enquanto o da direita foca na meta agregada de Aprendizagem Adequada (Todos Pela Educação).
                     </div>
                     
                     <div class="row g-4">
@@ -699,7 +699,7 @@
                                         <h6 class="mb-1 fw-bold text-dark">
                                             <i class="bi bi-graph-up-arrow me-1" style="color: var(--nivel-avancado);"></i> Evolução (Soares 2009)
                                         </h6>
-                                        <small class="text-muted">Adequado, Avançado e Meta (Soma)</small>
+                                        <small class="text-muted">Adequado, Avançado e Meta (Soma) vs. Referências</small>
                                     </div>
                                     <button id="btnBaixarEvolucaoSoares" class="btn btn-outline-success btn-sm fw-semibold">
                                         <i class="bi bi-download"></i> PNG
@@ -719,7 +719,7 @@
                                         <h6 class="mb-1 fw-bold" style="color: var(--nivel-tpe-adequado);">
                                             <i class="bi bi-graph-up-arrow me-1"></i> Evolução (Todos pela Educação)
                                         </h6>
-                                        <small class="text-muted">Aprendizagem Adequada (Agregada) vs. Ceará</small>
+                                        <small class="text-muted">Aprendizagem Adequada (Agregada) vs. Ceará e Brasil</small>
                                     </div>
                                     <button id="btnBaixarEvolucaoTPE" class="btn btn-outline-success btn-sm fw-semibold">
                                         <i class="bi bi-download"></i> PNG
@@ -733,31 +733,22 @@
                     </div>
                 </div>
 
-                <!-- Aba 5: Comparação Temporal (DUPLA) -->
+                <!-- Aba 5: Comparação Temporal (APENAS TPE) -->
                 <div class="tab-pane fade" id="comparacao" role="tabpanel">
                     <div class="card-edicao">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                             <div>
                                 <h5 class="mb-1 fw-bold">
                                     <i class="bi bi-arrow-left-right text-primary me-2"></i>
-                                    Comparação Temporal de Aprendizagem
+                                    Comparação Temporal de Aprendizagem (TPE)
                                 </h5>
-                                <small class="text-muted">Análise de crescimento, recuo ou estabilidade entre edições consecutivas sob duas óticas metodológicas.</small>
+                                <small class="text-muted">Análise de crescimento, recuo ou estabilidade entre edições consecutivas baseada na meta de Aprendizagem Adequada (Todos Pela Educação).</small>
                             </div>
                             <button id="btnBaixarComparacao" class="btn btn-outline-success fw-semibold">
                                 <i class="bi bi-download"></i> Baixar Comparação PNG
                             </button>
                         </div>
                         
-                        <!-- Seção Soares -->
-                        <div class="secao-comparativa">
-                            <h5 style="color: var(--nivel-avancado);">
-                                <i class="bi bi-people-fill"></i> Metodologia Soares (2009) 
-                                <span class="badge bg-dark ms-2" style="font-size: 0.7rem;">Meta: Adequado + Avançado</span>
-                            </h5>
-                            <div id="containerComparacaoSoares"></div>
-                        </div>
-
                         <!-- Seção TPE -->
                         <div class="secao-comparativa" style="border-left: 4px solid var(--nivel-tpe-adequado);">
                             <h5 style="color: var(--nivel-tpe-adequado);">
@@ -805,6 +796,23 @@
     const CAMINHO_ARQUIVO = "Pasta_3.xlsx";
 
     Chart.register(ChartDataLabels);
+
+    // Função para normalizar texto (remove acentos e coloca em maiúsculas)
+    function normalizar(str) {
+        if (!str) return "";
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
+    }
+
+    // Função robusta para buscar dados de entidades de referência (Ceará, Brasil)
+    function buscarDadosEntidade(nomeEntidade, etapaNum, componente) {
+        const nomeNorm = normalizar(nomeEntidade);
+        const compNorm = mapComponente(componente);
+        return dados.filter(d => 
+            normalizar(d.nome).includes(nomeNorm) && 
+            d.etapaNum === etapaNum && 
+            mapComponente(d.componente) === compNorm
+        ).sort((a, b) => a.edicao.localeCompare(b.edicao));
+    }
 
     // Paleta de cores para os 11 níveis (Spectral do ColorBrewer)
     const CORES_NIVEIS = {
@@ -1259,7 +1267,6 @@
             
             const title = document.createElement('h5');
             title.className = 'm-0 fw-bold';
-            // COR ALTERADA PARA VERDE ESCURO CONFORME SOLICITADO
             title.innerHTML = `<i class="bi bi-calendar-event me-2" style="color: var(--nivel-tpe-adequado)"></i>Edição: ${d.edicao}`;
             headerDiv.appendChild(title);
 
@@ -1429,7 +1436,7 @@
         }
     }
 
-    // === ABA 4: Evolução Histórica (2 GRÁFICOS) ===
+    // === ABA 4: Evolução Histórica (COM BRASIL E CEARÁ) ===
     function renderizarEvolucao() {
         if (graficoEvolucaoSoares) { graficoEvolucaoSoares.destroy(); graficoEvolucaoSoares = null; }
         if (graficoEvolucaoTPE) { graficoEvolucaoTPE.destroy(); graficoEvolucaoTPE = null; }
@@ -1439,11 +1446,16 @@
         if (!canvasSoares || !canvasTPE || dadosFiltrados.length === 0) return;
 
         const inepAtual = document.getElementById('escolaSelect').value;
+        const etapaNumFiltro = parseInt(document.getElementById('etapaSelect').value);
         const componenteAtual = document.getElementById('componenteSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
         
         const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
         const edicoes = dadosCron.map(d => d.edicao);
+        
+        // Buscar dados de referência com normalização de texto
+        const dadosCeara = buscarDadosEntidade('CEARA', etapaNumFiltro, componenteAtual);
+        const dadosBrasil = buscarDadosEntidade('BRASIL', etapaNumFiltro, componenteAtual);
         
         // Dados da Escola
         const adequadosEscolaSoares = [];
@@ -1465,14 +1477,26 @@
             adequadosEscolaTPE.push(Math.round(adeqT));
         });
 
-        // Dados do Ceará
-        const etapaNumFiltro = parseInt(document.getElementById('etapaSelect').value);
-        const dadosCeara = dados.filter(d => 
-            d.nome.toUpperCase().includes('CEARA') && 
-            d.etapaNum === etapaNumFiltro && 
-            mapComponente(d.componente) === mapComponente(componenteAtual)
-        ).sort((a, b) => a.edicao.localeCompare(b.edicao));
-        
+        // Dados do Ceará e Brasil para Soares (Meta: Adequado + Avançado)
+        const adequadosCearaSoares = edicoes.map(ed => {
+            const encontrado = dadosCeara.find(d => d.edicao === ed);
+            if (!encontrado) return null;
+            const soares = agruparNiveis(encontrado.etapaNum, encontrado.componente, encontrado.niveis, 'soares');
+            const adeq = soares.valoresCategorias[soares.categorias.indexOf('Adequado')] || 0;
+            const avan = soares.valoresCategorias[soares.categorias.indexOf('Avançado')] || 0;
+            return Math.round(adeq + avan);
+        });
+
+        const adequadosBrasilSoares = edicoes.map(ed => {
+            const encontrado = dadosBrasil.find(d => d.edicao === ed);
+            if (!encontrado) return null;
+            const soares = agruparNiveis(encontrado.etapaNum, encontrado.componente, encontrado.niveis, 'soares');
+            const adeq = soares.valoresCategorias[soares.categorias.indexOf('Adequado')] || 0;
+            const avan = soares.valoresCategorias[soares.categorias.indexOf('Avançado')] || 0;
+            return Math.round(adeq + avan);
+        });
+
+        // Dados do Ceará e Brasil para TPE (Adequado Agregado)
         const adequadosCearaTPE = edicoes.map(ed => {
             const encontrado = dadosCeara.find(d => d.edicao === ed);
             if (!encontrado) return null;
@@ -1480,7 +1504,14 @@
             return Math.round(tpe.valoresCategorias[tpe.categorias.indexOf('Adequado')] || 0);
         });
 
-        // --- GRÁFICO 1: SOARES (Cores escuras, sem sobreposição, texto nítido) ---
+        const adequadosBrasilTPE = edicoes.map(ed => {
+            const encontrado = dadosBrasil.find(d => d.edicao === ed);
+            if (!encontrado) return null;
+            const tpe = agruparNiveis(encontrado.etapaNum, encontrado.componente, encontrado.niveis, 'tpe');
+            return Math.round(tpe.valoresCategorias[tpe.categorias.indexOf('Adequado')] || 0);
+        });
+
+        // --- GRÁFICO 1: SOARES ---
         graficoEvolucaoSoares = new Chart(canvasSoares.getContext('2d'), {
             type: 'line',
             data: {
@@ -1489,26 +1520,37 @@
                     {
                         label: 'Adequado',
                         data: adequadosEscolaSoares,
-                        borderColor: '#16a34a', // Verde Médio/Escuro
+                        borderColor: '#16a34a',
                         backgroundColor: 'rgba(22, 163, 74, 0.1)',
-                        tension: 0.2, // Reduzido para evitar curvas exageradas e sobreposição
-                        fill: true, pointRadius: 6, pointBackgroundColor: '#16a34a', borderWidth: 3
+                        tension: 0.2, fill: true, pointRadius: 6, pointBackgroundColor: '#16a34a', borderWidth: 3
                     },
                     {
                         label: 'Avançado',
                         data: avancadosEscolaSoares,
-                        borderColor: '#14532d', // Verde Profundo
+                        borderColor: '#14532d',
                         backgroundColor: 'rgba(20, 83, 45, 0.1)',
-                        tension: 0.2,
-                        fill: true, pointRadius: 6, pointBackgroundColor: '#14532d', borderWidth: 3
+                        tension: 0.2, fill: true, pointRadius: 6, pointBackgroundColor: '#14532d', borderWidth: 3
                     },
                     {
-                        label: 'Adequado + Avançado (Meta)',
+                        label: 'Escola (Meta)',
                         data: adequadosMaisAvancadosEscola,
-                        borderColor: '#7e22ce', // Roxo vibrante para contraste máximo
-                        borderDash: [8, 4],
-                        tension: 0.1, // Quase reto para clareza da meta
-                        fill: false, pointRadius: 7, pointBackgroundColor: '#7e22ce', pointBorderColor: '#fff', pointBorderWidth: 2, borderWidth: 4
+                        borderColor: '#7e22ce',
+                        borderDash: [8, 4], tension: 0.1, fill: false, 
+                        pointRadius: 7, pointBackgroundColor: '#7e22ce', pointBorderColor: '#fff', pointBorderWidth: 2, borderWidth: 4
+                    },
+                    {
+                        label: 'Ceará (Meta)',
+                        data: adequadosCearaSoares,
+                        borderColor: '#7e22ce',
+                        borderDash: [4, 4], tension: 0.1, fill: false, 
+                        pointRadius: 5, pointBackgroundColor: '#7e22ce', borderWidth: 2
+                    },
+                    {
+                        label: 'Brasil (Meta)',
+                        data: adequadosBrasilSoares,
+                        borderColor: '#1e3a8a',
+                        borderDash: [2, 2], tension: 0.1, fill: false, 
+                        pointRadius: 5, pointBackgroundColor: '#1e3a8a', borderWidth: 2
                     }
                 ]
             },
@@ -1522,8 +1564,7 @@
                         font: { weight: '800', size: 11 },
                         backgroundColor: 'rgba(255, 255, 255, 0.95)', 
                         borderRadius: 4, padding: 4, borderWidth: 1, borderColor: context => context.dataset.borderColor,
-                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, 
-                        offset: 8
+                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 8
                     }
                 },
                 scales: {
@@ -1533,7 +1574,7 @@
             }
         });
 
-        // --- GRÁFICO 2: TPE (Escola vs Ceará) ---
+        // --- GRÁFICO 2: TPE ---
         graficoEvolucaoTPE = new Chart(canvasTPE.getContext('2d'), {
             type: 'line',
             data: {
@@ -1542,16 +1583,23 @@
                     {
                         label: nomeEscola,
                         data: adequadosEscolaTPE,
-                        borderColor: '#166534', // Verde Escuro (Solicitação)
+                        borderColor: '#166534', // Verde Escuro
                         backgroundColor: 'rgba(22, 101, 52, 0.1)',
                         tension: 0.25, fill: true, pointRadius: 6, pointBackgroundColor: '#166534', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3
                     },
                     {
                         label: 'Ceará (Estado)',
                         data: adequadosCearaTPE,
-                        borderColor: '#7e22ce', // Roxo para contraste nítido com o verde
+                        borderColor: '#7e22ce', // Roxo
                         backgroundColor: 'rgba(126, 34, 206, 0.05)',
-                        tension: 0.25, fill: false, pointRadius: 6, pointBackgroundColor: '#7e22ce', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3, borderDash: [6, 4]
+                        tension: 0.25, fill: false, pointRadius: 6, pointBackgroundColor: '#7e22ce', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [6, 4]
+                    },
+                    {
+                        label: 'Brasil (Nacional)',
+                        data: adequadosBrasilTPE,
+                        borderColor: '#1e3a8a', // Azul Escuro
+                        backgroundColor: 'rgba(30, 58, 138, 0.05)',
+                        tension: 0.25, fill: false, pointRadius: 6, pointBackgroundColor: '#1e3a8a', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [2, 2]
                     }
                 ]
             },
@@ -1576,39 +1624,27 @@
         });
     }
 
-    // === ABA 5: Comparação Temporal (DUPLA: Soares e TPE) ===
+    // === ABA 5: Comparação Temporal (APENAS TPE) ===
     function renderizarComparacaoTemporal() {
-        const containerSoares = document.getElementById('containerComparacaoSoares');
         const containerTPE = document.getElementById('containerComparacaoTPE');
-        containerSoares.innerHTML = '';
         containerTPE.innerHTML = '';
 
         if (dadosFiltrados.length < 2) {
-            const msg = `<div class="alert alert-info"><i class="bi bi-info-circle-fill me-2"></i>É necessário ter dados de pelo menos <strong>duas edições</strong> para realizar a comparação temporal.</div>`;
-            containerSoares.innerHTML = msg;
-            containerTPE.innerHTML = msg;
+            containerTPE.innerHTML = `<div class="alert alert-info"><i class="bi bi-info-circle-fill me-2"></i>É necessário ter dados de pelo menos <strong>duas edições</strong> para realizar a comparação temporal.</div>`;
             return;
         }
 
         const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
         
-        // Calcular métricas para cada edição
         const edicoesComMetricas = dadosCron.map(d => {
-            const soares = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'soares');
             const tpe = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'tpe');
-            
-            const adeqS = soares.valoresCategorias[soares.categorias.indexOf('Adequado')] || 0;
-            const avanS = soares.valoresCategorias[soares.categorias.indexOf('Avançado')] || 0;
-            
             return {
                 edicao: d.edicao,
-                metaSoares: Math.round(adeqS + avanS),
                 metaTPE: Math.round(tpe.valoresCategorias[tpe.categorias.indexOf('Adequado')] || 0)
             };
         });
 
-        // Função auxiliar para gerar os cards de comparação
-        function gerarGridComparacao(dados, chaveValor, tituloMetodologia) {
+        function gerarGridComparacao(dados, chaveValor) {
             let crescimentos = 0, recuos = 0, estaveis = 0;
             const comparacoes = [];
             
@@ -1719,8 +1755,7 @@
             return html;
         }
 
-        containerSoares.innerHTML = gerarGridComparacao(edicoesComMetricas, 'metaSoares', 'Soares');
-        containerTPE.innerHTML = gerarGridComparacao(edicoesComMetricas, 'metaTPE', 'TPE');
+        containerTPE.innerHTML = gerarGridComparacao(edicoesComMetricas, 'metaTPE');
     }
 
     // Event Listeners para Downloads
@@ -1758,7 +1793,7 @@
     });
 
     document.getElementById('btnBaixarComparacao').addEventListener('click', function() {
-        const container = document.getElementById('comparacao'); // Captura a aba inteira para ter os dois
+        const container = document.getElementById('comparacao');
         if (!container) return;
         const inepAtual = document.getElementById('escolaSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'escola';
@@ -1767,7 +1802,7 @@
         html2canvas(container, { backgroundColor: '#ffffff', scale: 2, useCORS: true }).then(canvas => {
             const a = document.createElement('a');
             a.href = canvas.toDataURL('image/png'); 
-            a.download = `${nomeLimpo}_${inepAtual}_Comparacao_Temporal_Dupla.png`; 
+            a.download = `${nomeLimpo}_${inepAtual}_Comparacao_Temporal_TPE.png`; 
             a.click();
         });
     });
