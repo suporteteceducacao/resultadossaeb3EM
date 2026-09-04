@@ -1244,40 +1244,46 @@
         }
     }
 
-    // === ABA 3: Evolução Histórica (mantido com Ceará) ===
+   // === ABA 3: Evolução Histórica (COM CEARÁ E BRASIL) ===
     function renderizarEvolucao() {
-        if (graficoEvolucao) {
-            graficoEvolucao.destroy();
-            graficoEvolucao = null;
-        }
-
+        if (graficoEvolucao) { graficoEvolucao.destroy(); graficoEvolucao = null; }
         const canvas = document.getElementById('graficoEvolucao');
-        if (!canvas) return;
-        if (dadosFiltrados.length === 0) return;
+        if (!canvas || dadosFiltrados.length === 0) return;
 
         const inepAtual = document.getElementById('escolaSelect').value;
-        const etapaAtual = parseInt(document.getElementById('etapaSelect').value, 10);
+        const etapaAtual = "3ª Série do Ensino Médio";
         const componenteAtual = document.getElementById('componenteSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
         
-        const isMaracanauSelecionado = nomeEscola.toUpperCase().includes('CEARÁ') || nomeEscola.toUpperCase().includes('MARACANAU');
-
         const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
         const edicoes = dadosCron.map(d => d.edicao);
+        
         const adequadosEscola = dadosCron.map(d => {
-            const { valoresCategorias } = agruparNiveis(d.etapaNum, d.componente, d.niveis);
+            const { valoresCategorias } = agruparNiveis(d.etapaStr, d.componente, d.niveis);
             return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
         });
 
-        const dadosMaracanau = dados.filter(d => 
-            (d.nome.toUpperCase().includes('CEARÁ') || d.nome.toUpperCase().includes('CEARÁ')) &&
-            d.etapaNum === etapaAtual && d.componente === componenteAtual
+        // Buscar dados do Ceará
+        const dadosCeara = dados.filter(d => 
+            d.nome.toUpperCase().includes('CEARÁ') && d.etapaStr === etapaAtual && d.componente === componenteAtual
         ).sort((a, b) => a.edicao.localeCompare(b.edicao));
-
-        const adequadosMaracanau = edicoes.map(ed => {
-            const encontrado = dadosMaracanau.find(d => d.edicao === ed);
+        
+        const adequadosCeara = edicoes.map(ed => {
+            const encontrado = dadosCeara.find(d => d.edicao === ed);
             if (!encontrado) return null;
-            const { valoresCategorias } = agruparNiveis(encontrado.etapaNum, encontrado.componente, encontrado.niveis);
+            const { valoresCategorias } = agruparNiveis(encontrado.etapaStr, encontrado.componente, encontrado.niveis);
+            return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
+        });
+
+        // Buscar dados do Brasil
+        const dadosBrasil = dados.filter(d => 
+            d.nome.toUpperCase().includes('BRASIL') && d.etapaStr === etapaAtual && d.componente === componenteAtual
+        ).sort((a, b) => a.edicao.localeCompare(b.edicao));
+        
+        const adequadosBrasil = edicoes.map(ed => {
+            const encontrado = dadosBrasil.find(d => d.edicao === ed);
+            if (!encontrado) return null;
+            const { valoresCategorias } = agruparNiveis(encontrado.etapaStr, encontrado.componente, encontrado.niveis);
             return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
         });
 
@@ -1286,63 +1292,47 @@
             data: adequadosEscola,
             borderColor: '#196F3D',
             backgroundColor: 'rgba(25, 111, 61, 0.1)',
-            tension: 0.25,
-            pointBackgroundColor: '#196F3D',
-            pointBorderColor: '#ffffff',
-            pointBorderWidth: 2,
-            fill: true,
-            pointRadius: 6,
-            pointHoverRadius: 8,
-            borderWidth: 3
+            tension: 0.25, fill: true, pointRadius: 6, pointBackgroundColor: '#196F3D', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3
         }];
 
-        if (!isMaracanauSelecionado && dadosMaracanau.length > 0) {
+        if (dadosCeara.length > 0) {
             datasets.push({
                 label: 'Ceará (Estado)',
-                data: adequadosMaracanau,
+                data: adequadosCeara,
                 borderColor: '#8b5cf6',
                 backgroundColor: 'rgba(139, 92, 246, 0.05)',
-                tension: 0.25,
-                pointBackgroundColor: '#8b5cf6',
-                pointBorderColor: '#ffffff',
-                pointBorderWidth: 2,
-                borderDash: [8, 5],
-                fill: false,
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                borderWidth: 2.5
+                tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#8b5cf6', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [6, 4]
             });
         }
 
-        const ctx = canvas.getContext('2d');
-        graficoEvolucao = new Chart(ctx, {
+        if (dadosBrasil.length > 0) {
+            datasets.push({
+                label: 'Brasil (Nacional)',
+                data: adequadosBrasil,
+                borderColor: '#f59e0b',
+                backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#f59e0b', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [2, 2]
+            });
+        }
+
+        graficoEvolucao = new Chart(canvas.getContext('2d'), {
             type: 'line',
             data: { labels: edicoes, datasets },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { 
-                        position: 'top', 
-                        labels: { font: { size: 12, weight: '600' }, padding: 15, usePointStyle: true, pointStyle: 'circle' } 
-                    },
+                    legend: { position: 'top', labels: { font: { size: 12, weight: '600' }, usePointStyle: true, pointStyle: 'circle' } },
                     datalabels: {
-                        align: 'top',
-                        anchor: 'end',
+                        align: 'top', anchor: 'end',
                         color: function(context) { return context.dataset.borderColor; },
                         font: { weight: 'bold', size: 12 },
-                        backgroundColor: 'rgba(255, 255, 255, 0.85)',
-                        borderRadius: 4,
-                        padding: 4,
-                        formatter: function(value) { return value !== null ? `${value}%` : ''; },
-                        offset: 8
-                    },
-                    tooltip: {
-                        callbacks: { label: context => ` ${context.dataset.label}: ${context.raw}%` }
+                        backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: 4, padding: 4,
+                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 8
                     }
                 },
                 scales: {
-                    y: { min: 0, max: 100, ticks: { callback: v => v + '%', font: { size: 12 } }, grid: { color: '#f1f5f9' } },
+                    y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } },
                     x: { grid: { display: false }, ticks: { font: { size: 13, weight: '600' } } }
                 }
             }
