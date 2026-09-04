@@ -658,7 +658,7 @@
                     </div>
                 </div>
 
-                <!-- Aba 3: Evolução Histórica (mantido com Maracanaú) -->
+                <!-- Aba 3: Evolução Histórica (mantido com Ceará) -->
                 <div class="tab-pane fade" id="evolucao" role="tabpanel">
                     <div class="card-edicao">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -667,7 +667,7 @@
                                     <i class="bi bi-graph-up-arrow text-primary me-2"></i>
                                     Evolução Histórica da Aprendizagem Adequada (%)
                                 </h5>
-                                <small class="text-muted">Evolução da escola selecionada em comparação com o Município de Maracanaú</small>
+                                <small class="text-muted">Evolução da escola selecionada em comparação com o Estado do Ceará</small>
                             </div>
                             <button id="btnBaixarEvolucao" class="btn btn-outline-success fw-semibold">
                                 <i class="bi bi-download"></i> Baixar Gráfico PNG
@@ -675,7 +675,7 @@
                         </div>
                         <div class="info-box comparativo">
                             <i class="bi bi-info-circle-fill me-2"></i>
-                            <strong>Comparativo Municipal:</strong> A linha tracejada roxa representa o percentual de aprendizagem adequada do <strong>Município de Maracanaú</strong> para a mesma etapa e componente.
+                            <strong>Comparativo Municipal:</strong> A linha tracejada roxa representa o percentual de aprendizagem adequada do <strong>Estado do Cará</strong> para a mesma etapa e componente.
                         </div>
                         <div style="height:450px;">
                             <canvas id="graficoEvolucao"></canvas>
@@ -1244,7 +1244,7 @@
         }
     }
 
-    // === ABA 3: Evolução Histórica (mantido com Maracanaú) ===
+    // === ABA 3: Evolução Histórica (mantido com Ceará) ===
     function renderizarEvolucao() {
         if (graficoEvolucao) {
             graficoEvolucao.destroy();
@@ -1260,7 +1260,7 @@
         const componenteAtual = document.getElementById('componenteSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
         
-        const isMaracanauSelecionado = nomeEscola.toUpperCase().includes('MARACANAÚ') || nomeEscola.toUpperCase().includes('MARACANAU');
+        const isMaracanauSelecionado = nomeEscola.toUpperCase().includes('CEARÁ') || nomeEscola.toUpperCase().includes('MARACANAU');
 
         const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
         const edicoes = dadosCron.map(d => d.edicao);
@@ -1270,7 +1270,7 @@
         });
 
         const dadosMaracanau = dados.filter(d => 
-            (d.nome.toUpperCase().includes('MARACANAÚ') || d.nome.toUpperCase().includes('MARACANAU')) &&
+            (d.nome.toUpperCase().includes('CEARÁ') || d.nome.toUpperCase().includes('CEARÁ')) &&
             d.etapaNum === etapaAtual && d.componente === componenteAtual
         ).sort((a, b) => a.edicao.localeCompare(b.edicao));
 
@@ -1298,7 +1298,7 @@
 
         if (!isMaracanauSelecionado && dadosMaracanau.length > 0) {
             datasets.push({
-                label: 'Maracanaú (Município)',
+                label: 'Ceará (Estado)',
                 data: adequadosMaracanau,
                 borderColor: '#8b5cf6',
                 backgroundColor: 'rgba(139, 92, 246, 0.05)',
