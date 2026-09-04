@@ -33,11 +33,14 @@
             --cor-perigo: #ef4444;
             --cor-info: #3b82f6;
             
-            /* Cores originais dos 4 grandes grupos */
+            /* Cores dos níveis (Soares - 4 níveis) */
             --nivel-abaixo: #FF4136;
             --nivel-basico: #FF851B;
             --nivel-proficiente: #B0E57C;
             --nivel-avancado: #006400;
+            
+            /* Cor específica para Adequado TPE (agregado) */
+            --nivel-tpe-adequado: #3b82f6;
             
             --cor-maracanau: #8b5cf6;
         }
@@ -314,9 +317,6 @@
             margin: 40px 0;
         }
         
-        /* ============================================================ */
-        /* CARDS DE COMPARAÇÃO TEMPORAL (NOVA ABA)                       */
-        /* ============================================================ */
         .comparacao-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -559,7 +559,7 @@
             
             <hr class="text-muted my-3" />
             <div class="legend-box">
-                <strong class="text-dark d-block mb-2" style="font-size: 0.85rem;">LEGENDA DOS NÍVEIS:</strong>
+                <strong class="text-dark d-block mb-2" style="font-size: 0.85rem;">LEGENDA (Soares 2009):</strong>
                 <div class="legend-item">
                     <div class="legend-dot" style="background: var(--nivel-abaixo);"></div>
                     <span>Abaixo do Básico</span>
@@ -570,11 +570,14 @@
                 </div>
                 <div class="legend-item">
                     <div class="legend-dot" style="background: var(--nivel-proficiente);"></div>
-                    <span>Proficiente</span>
+                    <span>Adequado</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-dot" style="background: var(--nivel-avancado);"></div>
                     <span>Avançado</span>
+                </div>
+                <div class="mt-2 pt-2 border-top text-muted" style="font-size: 0.75rem;">
+                    <em>Nota: Na classificação "Todos Pela Educação", as categorias "Adequado" e "Avançado" são agregadas em uma única categoria "Adequado".</em>
                 </div>
             </div>
         </div>
@@ -595,7 +598,7 @@
             <div class="page-header">
                 <h1 class="page-title">
                     <span class="icon-wrapper"><i class="bi bi-bar-chart-line-fill"></i></span>
-                    Análise de Desempenho SAEB por Níveis - 3º Ano Ensino Médio
+                    Análise de Desempenho SAEB por Níveis
                 </h1>
                 <p class="page-subtitle" id="subtituloTopo">Visualização automática dos resultados por edição e evolução da aprendizagem.</p>
             </div>
@@ -608,13 +611,18 @@
             <!-- Abas -->
             <ul class="nav nav-tabs" id="myTab" role="tablist" style="display:none;">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="desempenho-tab" data-bs-toggle="tab" data-bs-target="#desempenho" type="button" role="tab">
-                        <i class="bi bi-bar-chart-fill me-1"></i> Desempenho por Edição
+                    <button class="nav-link active" id="desempenho-soares-tab" data-bs-toggle="tab" data-bs-target="#desempenho-soares" type="button" role="tab">
+                        <i class="bi bi-bar-chart-fill me-1"></i> Classificação Soares (2009)
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="desempenho-tpe-tab" data-bs-toggle="tab" data-bs-target="#desempenho-tpe" type="button" role="tab">
+                        <i class="bi bi-bar-chart-steps me-1"></i> Classificação Todos pela Educação
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="distribuicao-tab" data-bs-toggle="tab" data-bs-target="#distribuicao" type="button" role="tab">
-                        <i class="bi bi-bar-chart-steps me-1"></i> Distribuição por Níveis
+                        <i class="bi bi-grid-3x3-gap me-1"></i> Distribuição por Níveis (0-10)
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -630,26 +638,28 @@
             </ul>
 
             <div class="tab-content" id="myTabContent" style="display:none;">
-                <!-- Aba 1: Desempenho por Edição (mantido) -->
-                <div class="tab-pane fade show active" id="desempenho" role="tabpanel"></div>
+                <!-- Aba 1: Desempenho por Edição (Soares 2009 - 4 níveis) -->
+                <div class="tab-pane fade show active" id="desempenho-soares" role="tabpanel"></div>
 
-                <!-- Aba 2: Distribuição por Níveis (BARRAS AGRUPADAS 0-10) -->
+                <!-- Aba 2: Desempenho por Edição (TPE - 3 níveis) -->
+                <div class="tab-pane fade" id="desempenho-tpe" role="tabpanel"></div>
+
+                <!-- Aba 3: Distribuição por Níveis (BARRAS AGRUPADAS 0-10) -->
                 <div class="tab-pane fade" id="distribuicao" role="tabpanel">
                     <div class="card-edicao">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                             <div>
                                 <h5 class="mb-1 fw-bold">
-                                    <i class="bi bi-bar-chart-steps text-primary me-2"></i>
+                                    <i class="bi bi-grid-3x3-gap text-primary me-2"></i>
                                     Distribuição Detalhada por Nível (0 a 10)
                                 </h5>
-                                <small class="text-muted">Percentual de alunos em cada nível de proficiência para cada edição (barras agrupadas)</small>
+                                <small class="text-muted">Percentual de alunos em cada nível de proficiência para cada edição (base primária)</small>
                             </div>
                             <button id="btnBaixarDistribuicao" class="btn btn-outline-success fw-semibold">
                                 <i class="bi bi-download"></i> Baixar Gráfico PNG
                             </button>
                         </div>
                         
-                        <!-- Paleta de cores dos 11 níveis -->
                         <div class="paleta-niveis" id="paletaNiveis"></div>
                         
                         <div class="grafico-wrapper-vertical mt-3">
@@ -658,41 +668,66 @@
                     </div>
                 </div>
 
-                <!-- Aba 3: Evolução Histórica (mantido com Ceará) -->
+                <!-- Aba 4: Evolução Histórica (2 GRÁFICOS: Soares e TPE) -->
                 <div class="tab-pane fade" id="evolucao" role="tabpanel">
-                    <div class="card-edicao">
-                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                            <div>
-                                <h5 class="mb-1 fw-bold">
-                                    <i class="bi bi-graph-up-arrow text-primary me-2"></i>
-                                    Evolução Histórica da Aprendizagem Adequada (%)
-                                </h5>
-                                <small class="text-muted">Evolução da escola selecionada em comparação com o Estado do Ceará</small>
+                    <div class="info-box comparativo mb-3">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <strong>Nota Metodológica:</strong> O gráfico da esquerda mostra a divisão em 4 níveis (Soares, 2009), destacando "Adequado" e "Avançado" separadamente, além da soma "Adequado + Avançado" para fins de comparação. O gráfico da direita mostra a classificação agregada de 3 níveis (Todos Pela Educação), onde "Adequado" engloba a soma das duas categorias anteriores.
+                    </div>
+                    
+                    <div class="row g-4">
+                        <!-- Gráfico Soares -->
+                        <div class="col-md-6">
+                            <div class="card-edicao h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold text-primary">
+                                            <i class="bi bi-graph-up-arrow me-1"></i> Evolução (Soares 2009)
+                                        </h6>
+                                        <small class="text-muted">Adequado, Avançado e Soma (Meta)</small>
+                                    </div>
+                                    <button id="btnBaixarEvolucaoSoares" class="btn btn-outline-success btn-sm fw-semibold">
+                                        <i class="bi bi-download"></i> PNG
+                                    </button>
+                                </div>
+                                <div style="height:350px;">
+                                    <canvas id="graficoEvolucaoSoares"></canvas>
+                                </div>
                             </div>
-                            <button id="btnBaixarEvolucao" class="btn btn-outline-success fw-semibold">
-                                <i class="bi bi-download"></i> Baixar Gráfico PNG
-                            </button>
                         </div>
-                        <div class="info-box comparativo">
-                            <i class="bi bi-info-circle-fill me-2"></i>
-                            <strong>Comparativo estadual:</strong> A linha tracejada roxa representa o percentual de aprendizagem adequada do <strong>Estado do Cará</strong> para a mesma etapa e componente.
-                        </div>
-                        <div style="height:450px;">
-                            <canvas id="graficoEvolucao"></canvas>
+
+                        <!-- Gráfico TPE -->
+                        <div class="col-md-6">
+                            <div class="card-edicao h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold" style="color: var(--nivel-tpe-adequado);">
+                                            <i class="bi bi-graph-up-arrow me-1"></i> Evolução (Todos pela Educação)
+                                        </h6>
+                                        <small class="text-muted">Aprendizagem Adequada (Agregada)</small>
+                                    </div>
+                                    <button id="btnBaixarEvolucaoTPE" class="btn btn-outline-success btn-sm fw-semibold">
+                                        <i class="bi bi-download"></i> PNG
+                                    </button>
+                                </div>
+                                <div style="height:350px;">
+                                    <canvas id="graficoEvolucaoTPE"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- NOVA ABA 4: Comparação Temporal -->
+                <!-- Aba 5: Comparação Temporal -->
                 <div class="tab-pane fade" id="comparacao" role="tabpanel">
                     <div class="card-edicao">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                             <div>
                                 <h5 class="mb-1 fw-bold">
                                     <i class="bi bi-arrow-left-right text-primary me-2"></i>
-                                    Comparação Temporal da Aprendizagem Adequada
+                                    Comparação Temporal da Aprendizagem Adequada (TPE)
                                 </h5>
-                                <small class="text-muted">Análise de crescimento, recuo ou estabilidade entre edições consecutivas</small>
+                                <small class="text-muted">Análise de crescimento, recuo ou estabilidade entre edições consecutivas (baseado na meta agregada)</small>
                             </div>
                             <button id="btnBaixarComparacao" class="btn btn-outline-success fw-semibold">
                                 <i class="bi bi-download"></i> Baixar Comparação PNG
@@ -706,14 +741,15 @@
 
             <!-- Tipos de Aprendizado -->
             <div class="learning-types-card">
-                <h5><i class="bi bi-lightbulb-fill text-warning me-2"></i>Tipos de Aprendizado</h5>
+                <h5><i class="bi bi-lightbulb-fill text-warning me-2"></i>Classificações de Aprendizagem</h5>
                 <ul class="list-unstyled mb-2">
-                    <li><strong>Avançado:</strong> Aprendizado além da expectativa. Recomenda-se atividades desafiadoras.</li>
-                    <li><strong>Proficiente:</strong> Os alunos estão preparados para continuar os estudos. Recomenda-se atividades de aprofundamento.</li>
+                    <li><strong>Avançado (Soares):</strong> Aprendizado além da expectativa. Recomenda-se atividades desafiadoras.</li>
+                    <li><strong>Adequado (Soares):</strong> Os alunos estão preparados para continuar os estudos. Recomenda-se atividades de aprofundamento.</li>
+                    <li><strong>Adequado (TPE):</strong> Soma das categorias "Adequado" e "Avançado" de Soares. Representa a meta de aprendizagem mínima esperada.</li>
                     <li><strong>Básico:</strong> Os alunos precisam melhorar. Sugere-se atividades de reforço.</li>
                     <li><strong>Abaixo do Básico:</strong> Apresentaram pouquíssimo aprendizado. É necessária a recuperação de conteúdos.</li>
                 </ul>
-                <p class="text-muted small mb-0">Fonte: <a href="https://qedu.org.br/" target="_blank" class="text-decoration-none">https://qedu.org.br/</a> – INEP, 2023.</p>
+                <p class="text-muted small mb-0">Fonte: Soares (2009) e Todos Pela Educação (2025), com base na escala de proficiência do SAEB/INEP.</p>
             </div>
 
             <footer class="footer">
@@ -729,33 +765,71 @@
     let dados = [];
     let escolasMap = new Map();
     let dadosFiltrados = [];
-    let graficosBarras = [];
-    let graficoEvolucao = null;
+    let graficosBarrasSoares = [];
+    let graficosBarrasTPE = [];
+    let graficoEvolucaoSoares = null;
+    let graficoEvolucaoTPE = null;
     let graficoDistribuicao = null;
 
     const CAMINHO_ARQUIVO = "Pasta_3.xlsx";
 
     Chart.register(ChartDataLabels);
 
-    // Paleta de cores para os 11 níveis (Spectral do ColorBrewer - sequencial vermelho→verde)
+    // Paleta de cores para os 11 níveis (Spectral do ColorBrewer)
     const CORES_NIVEIS = {
-        0:  '#9e0142', // Vermelho muito escuro
-        1:  '#d53e4f', // Vermelho
-        2:  '#f46d43', // Vermelho-laranja
-        3:  '#fdae61', // Laranja claro
-        4:  '#fee08b', // Amarelo claro
-        5:  '#ffffbf', // Amarelo pálido
-        6:  '#d9ef8b', // Verde-amarelado
-        7:  '#a6d96a', // Verde claro
-        8:  '#66bd63', // Verde médio
-        9:  '#1a9850', // Verde forte
-        10: '#006837'  // Verde muito escuro
+        0:  '#9e0142', 1:  '#d53e4f', 2:  '#f46d43', 3:  '#fdae61', 4:  '#fee08b',
+        5:  '#ffffbf', 6:  '#d9ef8b', 7:  '#a6d96a', 8:  '#66bd63', 9:  '#1a9850', 10: '#006837'
     };
     
-    // Cor de texto ideal para cada nível (baseado no contraste)
     const TEXTOS_NIVEIS = {
         0: 'white', 1: 'white', 2: 'black', 3: 'black', 4: 'black',
         5: 'black', 6: 'black', 7: 'black', 8: 'white', 9: 'white', 10: 'white'
+    };
+
+    // MATRIZ DE MAPEAMENTO SAEB -> CLASSIFICAÇÕES (Conforme documentação técnica fornecida)
+    const MAPEAMENTO_SAEB = {
+        '5_LP': {
+            soares: { 'Abaixo do Básico': [0,1], 'Básico': [2,3], 'Adequado': [4,5], 'Avançado': [6,7,8,9] },
+            tpe: { 'Abaixo do Básico': [0,1], 'Básico': [2,3], 'Adequado': [4,5,6,7,8,9] }
+        },
+        '5_MT': {
+            soares: { 'Abaixo do Básico': [0,1,2], 'Básico': [3,4], 'Adequado': [5,6], 'Avançado': [7,8,9,10] },
+            tpe: { 'Abaixo do Básico': [0,1,2], 'Básico': [3,4], 'Adequado': [5,6,7,8,9,10] }
+        },
+        '9_LP': {
+            soares: { 'Abaixo do Básico': [0], 'Básico': [1,2,3], 'Adequado': [4,5], 'Avançado': [6,7,8] },
+            tpe: { 'Abaixo do Básico': [0], 'Básico': [1,2,3], 'Adequado': [4,5,6,7,8] }
+        },
+        '9_MT': {
+            soares: { 'Abaixo do Básico': [0,1], 'Básico': [2,3,4], 'Adequado': [5,6], 'Avançado': [7,8,9,10] },
+            tpe: { 'Abaixo do Básico': [0,1], 'Básico': [2,3,4], 'Adequado': [5,6,7,8,9,10] }
+        },
+        '3_LP': { // Ensino Médio
+            soares: { 'Abaixo do Básico': [0,1], 'Básico': [2,3], 'Adequado': [4,5], 'Avançado': [6,7,8,9,10] },
+            tpe: { 'Abaixo do Básico': [0,1], 'Básico': [2,3], 'Adequado': [4,5,6,7,8,9,10] }
+        },
+        '3_MT': { // Ensino Médio
+            soares: { 'Abaixo do Básico': [0,1,2], 'Básico': [3,4,5], 'Adequado': [6,7], 'Avançado': [8,9,10] },
+            tpe: { 'Abaixo do Básico': [0,1,2], 'Básico': [3,4,5], 'Adequado': [6,7,8,9,10] }
+        }
+    };
+
+    const CORES_CATEGORIAS = {
+        'Abaixo do Básico': '#FF4136',
+        'Básico': '#FF851B',
+        'Adequado': '#B0E57C',
+        'Avançado': '#006400',
+        'Adequado (TPE)': '#3b82f6',
+        'Adequado + Avançado': '#059669' // Verde mais escuro para a soma no gráfico de evolução
+    };
+
+    const TEXTOS_CATEGORIAS = {
+        'Abaixo do Básico': 'white',
+        'Básico': 'black',
+        'Adequado': 'black',
+        'Avançado': 'white',
+        'Adequado (TPE)': 'white',
+        'Adequado + Avançado': 'white'
     };
 
     function toggleSidebar() {
@@ -787,32 +861,18 @@
         return nomeCompleto;
     }
 
-    // LÓGICA ORIGINAL DE AGRUPAMENTO (preservada para abas Desempenho e Evolução)
-    function agruparNiveis(etapa, componente, valores) {
-        let grupos = {};
+    // NOVA LÓGICA DE AGRUPAMENTO UNIFICADA
+    function agruparNiveis(etapaNum, componente, valores, metodologia) {
         const comp = mapComponente(componente);
-        if (etapa === 3 && comp === "LP") {
-            grupos = {'ABAIXO DO BÁSICO':[0, 1], 'BÁSICO':[2,3], 'PROFICIENTE':[4,5,6], 'AVANÇADO':[7, 8]};
-        } else if (etapa === 3 && (comp === "MT" || comp === "ABAIXO DO BÁSICO")) {
-            grupos = {'ABAIXO DO BÁSICO':[0, 1, 2], 'BÁSICO':[3,4], 'PROFICIENTE':[5,6], 'AVANÇADO':[7, 8, 9, 10]};
-        } else {
-            grupos = {'ABAIXO DO BÁSICO': [0, 1, 2], 'BÁSICO':[3,4], 'PROFICIENTE':[5,6], 'AVANÇADO':[7, 8, 9, 10]};
+        const chave = `${etapaNum}_${comp}`;
+        const mapeamento = MAPEAMENTO_SAEB[chave];
+        
+        if (!mapeamento) {
+            // Fallback genérico se a combinação não estiver na matriz
+            return { categorias: ['Desconhecido'], valoresCategorias: [100], cores: ['#ccc'], textColors: ['black'] };
         }
 
-        const cores = {
-            'ABAIXO DO BÁSICO': '#FF4136',
-            'BÁSICO': '#FF851B',
-            'PROFICIENTE': '#B0E57C',
-            'AVANÇADO': '#006400'
-        };
-        
-        const textColors = {
-            'ABAIXO DO BÁSICO': 'white',
-            'BÁSICO': 'black',
-            'PROFICIENTE': 'black',
-            'AVANÇADO': 'white'
-        };
-
+        const grupos = mapeamento[metodologia];
         const categorias = [], valoresCategorias = [], coresList = [], textColorsList = [];
 
         for (let cat in grupos) {
@@ -823,8 +883,13 @@
             }
             categorias.push(cat);
             valoresCategorias.push(soma);
-            coresList.push(cores[cat] || '#888888');
-            textColorsList.push(textColors[cat] || 'black');
+            
+            // Ajuste de cor para TPE
+            let corChave = cat;
+            if (metodologia === 'tpe' && cat === 'Adequado') corChave = 'Adequado (TPE)';
+            
+            coresList.push(CORES_CATEGORIAS[corChave] || '#888888');
+            textColorsList.push(TEXTOS_CATEGORIAS[corChave] || 'black');
         }
 
         return { categorias, valoresCategorias, cores: coresList, textColors: textColorsList };
@@ -972,7 +1037,7 @@
         sorted.forEach(e => {
             const opt = document.createElement('option');
             opt.value = e;
-            opt.textContent = `${e}º Ano`;
+            opt.textContent = `${e}º Ano / EM`;
             select.appendChild(opt);
         });
     }
@@ -999,7 +1064,7 @@
         if (!inep || isNaN(etapa) || !componente) return;
 
         const nomeEscola = escolasMap.get(inep) || '';
-        document.getElementById('subtituloTopo').innerHTML = `Escola / Município: <strong>${nomeEscola}</strong> (INEP: ${inep}) | Etapa: ${etapa}º Ano | Componente: ${componente}`;
+        document.getElementById('subtituloTopo').innerHTML = `Escola / Município: <strong>${nomeEscola}</strong> (INEP: ${inep}) | Etapa: ${etapa}º Ano/EM | Componente: ${componente}`;
 
         dadosFiltrados = dados.filter(d =>
             d.inep === inep && d.etapaNum === etapa && d.componente === componente
@@ -1007,19 +1072,19 @@
 
         dadosFiltrados.sort((a,b) => b.edicao.localeCompare(a.edicao));
 
-        renderizarDesempenho();
+        renderizarDesempenhoSoares();
+        renderizarDesempenhoTPE();
         renderizarDistribuicao();
         renderizarEvolucao();
         renderizarComparacaoTemporal();
     }
 
-    // === ABA 1: Desempenho por Edição (gráficos individuais horizontais - mantido) ===
-    function renderizarDesempenho() {
-        const container = document.getElementById('desempenho');
+    // === ABA 1: Desempenho por Edição (Soares 2009) ===
+    function renderizarDesempenhoSoares() {
+        const container = document.getElementById('desempenho-soares');
         container.innerHTML = '';
-
-        graficosBarras.forEach(g => { if (g.chart) g.chart.destroy(); });
-        graficosBarras = [];
+        graficosBarrasSoares.forEach(g => { if (g.chart) g.chart.destroy(); });
+        graficosBarrasSoares = [];
 
         if (dadosFiltrados.length === 0) {
             container.innerHTML = '<div class="alert alert-warning">Nenhum dado encontrado para esta seleção.</div>';
@@ -1030,14 +1095,18 @@
         const nomeEscola = escolasMap.get(inepAtual) || 'escola';
 
         dadosFiltrados.forEach((d, idx) => {
-            const { categorias, valoresCategorias, cores, textColors } = agruparNiveis(d.etapaNum, d.componente, d.niveis);
-            const adequado = (valoresCategorias[2] || 0) + (valoresCategorias[3] || 0);
-            const adequadoArredondado = Math.round(adequado);
-            const { bg, text } = corCardPorPercentual(adequadoArredondado);
+            const { categorias, valoresCategorias, cores, textColors } = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'soares');
+            
+            // Para Soares, "Adequado" é apenas a categoria específica, mas podemos mostrar Adequado + Avançado como destaque
+            const adequado = valoresCategorias[categorias.indexOf('Adequado')] || 0;
+            const avancado = valoresCategorias[categorias.indexOf('Avançado')] || 0;
+            const adequadoTotal = Math.round(adequado + avancado);
+            
+            const { bg, text } = corCardPorPercentual(adequadoTotal);
 
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card-edicao';
-            cardDiv.id = `card-edicao-${idx}`;
+            cardDiv.id = `card-edicao-soares-${idx}`;
 
             const headerDiv = document.createElement('div');
             headerDiv.className = 'd-flex justify-content-between align-items-center mb-3';
@@ -1052,11 +1121,10 @@
             btnDownload.innerHTML = '<i class="bi bi-download"></i> Baixar Gráfico';
             btnDownload.onclick = function() {
                 const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
-                const nomeArquivo = `${nomeLimpo}_${inepAtual}_Edicao_${d.edicao}.png`;
-                const canvasEl = document.getElementById(`chart-${idx}`);
-                const image = canvasEl.toDataURL('image/png');
+                const nomeArquivo = `${nomeLimpo}_${inepAtual}_Edicao_${d.edicao}_Soares.png`;
+                const canvasEl = document.getElementById(`chart-soares-${idx}`);
                 const a = document.createElement('a');
-                a.href = image; a.download = nomeArquivo; a.click();
+                a.href = canvasEl.toDataURL('image/png'); a.download = nomeArquivo; a.click();
             };
             headerDiv.appendChild(btnDownload);
             cardDiv.appendChild(headerDiv);
@@ -1067,7 +1135,125 @@
             const colGrafico = document.createElement('div');
             colGrafico.className = 'col-md-9';
             const canvas = document.createElement('canvas');
-            canvas.id = `chart-${idx}`;
+            canvas.id = `chart-soares-${idx}`;
+            canvas.className = 'grafico-wrapper';
+            colGrafico.appendChild(canvas);
+            row.appendChild(colGrafico);
+
+            const colCard = document.createElement('div');
+            colCard.className = 'col-md-3 text-center';
+            const cardAprend = document.createElement('div');
+            cardAprend.className = 'card-aprendizagem';
+            cardAprend.style.backgroundColor = bg;
+            cardAprend.style.color = text;
+            cardAprend.innerHTML = `
+                <h6>Adequado + Avançado</h6>
+                <div class="valor">${adequadoTotal}%</div>
+                <small style="font-size:0.7rem; opacity:0.9">Meta TPE Equivalente</small>
+            `;
+            colCard.appendChild(cardAprend);
+            row.appendChild(colCard);
+
+            cardDiv.appendChild(row);
+            container.appendChild(cardDiv);
+
+            const ctx = canvas.getContext('2d');
+            const datasets = categorias.map((cat, i) => ({
+                label: cat,
+                data: [valoresCategorias[i]],
+                backgroundColor: cores[i],
+                borderColor: '#ffffff',
+                borderWidth: 1.5,
+                borderRadius: 4
+            }));
+
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: [''], datasets },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { boxWidth: 14, font: { size: 11, weight: '600' } } },
+                        datalabels: {
+                            color: function(context) { return textColors[context.datasetIndex] || '#fff'; },
+                            font: { weight: 'bold', size: 13 },
+                            formatter: function(value) {
+                                let rounded = Math.round(value);
+                                return rounded >= 3 ? `${rounded}%` : '';
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return ` ${context.dataset.label}: ${Math.round(context.raw)}%`; }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%', stepSize: 20 }, grid: { display: false } },
+                        y: { stacked: true, display: false, grid: { display: false } }
+                    }
+                }
+            });
+
+            graficosBarrasSoares.push({ chart, edicao: d.edicao });
+        });
+    }
+
+    // === ABA 2: Desempenho por Edição (TPE) ===
+    function renderizarDesempenhoTPE() {
+        const container = document.getElementById('desempenho-tpe');
+        container.innerHTML = '';
+        graficosBarrasTPE.forEach(g => { if (g.chart) g.chart.destroy(); });
+        graficosBarrasTPE = [];
+
+        if (dadosFiltrados.length === 0) {
+            container.innerHTML = '<div class="alert alert-warning">Nenhum dado encontrado para esta seleção.</div>';
+            return;
+        }
+
+        const inepAtual = document.getElementById('escolaSelect').value;
+        const nomeEscola = escolasMap.get(inepAtual) || 'escola';
+
+        dadosFiltrados.forEach((d, idx) => {
+            const { categorias, valoresCategorias, cores, textColors } = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'tpe');
+            const adequado = valoresCategorias[categorias.indexOf('Adequado')] || 0;
+            const adequadoArredondado = Math.round(adequado);
+            const { bg, text } = corCardPorPercentual(adequadoArredondado);
+
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card-edicao';
+            cardDiv.id = `card-edicao-tpe-${idx}`;
+
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'd-flex justify-content-between align-items-center mb-3';
+            
+            const title = document.createElement('h5');
+            title.className = 'm-0 fw-bold';
+            title.innerHTML = `<i class="bi bi-calendar-event me-2" style="color:var(--nivel-tpe-adequado)"></i>Edição: ${d.edicao}`;
+            headerDiv.appendChild(title);
+
+            const btnDownload = document.createElement('button');
+            btnDownload.className = 'btn btn-outline-secondary fw-semibold';
+            btnDownload.innerHTML = '<i class="bi bi-download"></i> Baixar Gráfico';
+            btnDownload.onclick = function() {
+                const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
+                const nomeArquivo = `${nomeLimpo}_${inepAtual}_Edicao_${d.edicao}_TPE.png`;
+                const canvasEl = document.getElementById(`chart-tpe-${idx}`);
+                const a = document.createElement('a');
+                a.href = canvasEl.toDataURL('image/png'); a.download = nomeArquivo; a.click();
+            };
+            headerDiv.appendChild(btnDownload);
+            cardDiv.appendChild(headerDiv);
+
+            const row = document.createElement('div');
+            row.className = 'row align-items-center g-3';
+
+            const colGrafico = document.createElement('div');
+            colGrafico.className = 'col-md-9';
+            const canvas = document.createElement('canvas');
+            canvas.id = `chart-tpe-${idx}`;
             canvas.className = 'grafico-wrapper';
             colGrafico.appendChild(canvas);
             row.appendChild(colGrafico);
@@ -1081,6 +1267,7 @@
             cardAprend.innerHTML = `
                 <h6>Aprendizagem Adequada</h6>
                 <div class="valor">${adequadoArredondado}%</div>
+                <small style="font-size:0.7rem; opacity:0.9">Classificação TPE</small>
             `;
             colCard.appendChild(cardAprend);
             row.appendChild(colCard);
@@ -1128,11 +1315,11 @@
                 }
             });
 
-            graficosBarras.push({ chart, edicao: d.edicao, adequado });
+            graficosBarrasTPE.push({ chart, edicao: d.edicao });
         });
     }
 
-    // === NOVA ABA 2: Distribuição por Níveis (BARRAS AGRUPADAS 0-10) ===
+    // === ABA 3: Distribuição por Níveis (BARRAS AGRUPADAS 0-10) ===
     function renderizarDistribuicao() {
         if (graficoDistribuicao) {
             graficoDistribuicao.destroy();
@@ -1140,20 +1327,16 @@
         }
 
         const canvas = document.getElementById('graficoDistribuicao');
-        if (!canvas) return;
+        if (!canvas || dadosFiltrados.length === 0) return;
 
-        if (dadosFiltrados.length === 0) return;
-
-        // Ordenar cronologicamente
         const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
         const edicoes = dadosCron.map(d => d.edicao);
         
-        // Criar 11 datasets (um para cada nível 0-10)
         const datasets = [];
         for (let nivel = 0; nivel <= 10; nivel++) {
             const dadosNivel = dadosCron.map(d => {
                 const valor = d.niveis[nivel] !== undefined ? d.niveis[nivel] : 0;
-                return Math.round(valor * 100) / 100; // 2 casas decimais
+                return Math.round(valor * 100) / 100;
             });
             
             datasets.push({
@@ -1177,56 +1360,29 @@
                 plugins: {
                     legend: {
                         position: 'top',
-                        labels: {
-                            boxWidth: 12,
-                            boxHeight: 12,
-                            font: { size: 10, weight: '600' },
-                            padding: 8,
-                            usePointStyle: true,
-                            pointStyle: 'rect'
-                        }
+                        labels: { boxWidth: 12, boxHeight: 12, font: { size: 10, weight: '600' }, padding: 8, usePointStyle: true, pointStyle: 'rect' }
                     },
                     datalabels: {
-                        display: function(context) {
-                            // Só exibe rótulo se a barra for suficientemente alta (> 3%)
-                            return context.dataset.data[context.dataIndex] >= 3;
-                        },
-                        color: function(context) {
-                            return TEXTOS_NIVEIS[context.datasetIndex] || 'black';
-                        },
+                        display: function(context) { return context.dataset.data[context.dataIndex] >= 3; },
+                        color: function(context) { return TEXTOS_NIVEIS[context.datasetIndex] || 'black'; },
                         font: { weight: 'bold', size: 9 },
-                        anchor: 'center',
-                        align: 'center',
+                        anchor: 'center', align: 'center',
                         formatter: function(value) {
                             const rounded = Math.round(value);
                             return rounded >= 3 ? `${rounded}%` : '';
                         }
                     },
                     tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return ` ${context.dataset.label}: ${context.raw.toFixed(2)}%`;
-                            }
-                        }
+                        callbacks: { label: function(context) { return ` ${context.dataset.label}: ${context.raw.toFixed(2)}%`; } }
                     }
                 },
                 scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 13, weight: '700' } }
-                    },
+                    x: { grid: { display: false }, ticks: { font: { size: 13, weight: '700' } } },
                     y: {
                         beginAtZero: true,
-                        ticks: {
-                            callback: v => v + '%',
-                            font: { size: 11 }
-                        },
+                        ticks: { callback: v => v + '%', font: { size: 11 } },
                         grid: { color: '#f1f5f9' },
-                        title: {
-                            display: true,
-                            text: 'Percentual de Estudantes (%)',
-                            font: { size: 12, weight: '600' }
-                        }
+                        title: { display: true, text: 'Percentual de Estudantes (%)', font: { size: 12, weight: '600' } }
                     }
                 }
             }
@@ -1244,129 +1400,161 @@
         }
     }
 
-   // === ABA 3: Evolução Histórica (COM CEARÁ E BRASIL) ===
+    // === ABA 4: Evolução Histórica (2 GRÁFICOS) ===
     function renderizarEvolucao() {
-        if (graficoEvolucao) { graficoEvolucao.destroy(); graficoEvolucao = null; }
-        const canvas = document.getElementById('graficoEvolucao');
-        if (!canvas || dadosFiltrados.length === 0) return;
+        if (graficoEvolucaoSoares) { graficoEvolucaoSoares.destroy(); graficoEvolucaoSoares = null; }
+        if (graficoEvolucaoTPE) { graficoEvolucaoTPE.destroy(); graficoEvolucaoTPE = null; }
+        
+        const canvasSoares = document.getElementById('graficoEvolucaoSoares');
+        const canvasTPE = document.getElementById('graficoEvolucaoTPE');
+        if (!canvasSoares || !canvasTPE || dadosFiltrados.length === 0) return;
 
         const inepAtual = document.getElementById('escolaSelect').value;
-        const etapaAtual = "3ª Série do Ensino Médio";
+        const etapaAtual = document.getElementById('etapaSelect').options[document.getElementById('etapaSelect').selectedIndex].text;
         const componenteAtual = document.getElementById('componenteSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
         
         const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
         const edicoes = dadosCron.map(d => d.edicao);
         
-        const adequadosEscola = dadosCron.map(d => {
-            const { valoresCategorias } = agruparNiveis(d.etapaStr, d.componente, d.niveis);
-            return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
+        // Dados da Escola
+        const adequadosEscolaSoares = [];
+        const avancadosEscolaSoares = [];
+        const adequadosMaisAvancadosEscola = [];
+        const adequadosEscolaTPE = [];
+
+        dadosCron.forEach(d => {
+            const soares = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'soares');
+            const tpe = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'tpe');
+            
+            const adeqS = soares.valoresCategorias[soares.categorias.indexOf('Adequado')] || 0;
+            const avanS = soares.valoresCategorias[soares.categorias.indexOf('Avançado')] || 0;
+            const adeqT = tpe.valoresCategorias[tpe.categorias.indexOf('Adequado')] || 0;
+
+            adequadosEscolaSoares.push(Math.round(adeqS));
+            avancadosEscolaSoares.push(Math.round(avanS));
+            adequadosMaisAvancadosEscola.push(Math.round(adeqS + avanS));
+            adequadosEscolaTPE.push(Math.round(adeqT));
         });
 
-        // Buscar dados do Ceará
-        const dadosCeara = dados.filter(d => 
-            d.nome.toUpperCase().includes('CEARÁ') && d.etapaStr === etapaAtual && d.componente === componenteAtual
-        ).sort((a, b) => a.edicao.localeCompare(b.edicao));
+        // Dados do Ceará (Filtro aproximado por nome)
+        const dadosCeara = dados.filter(d => d.nome.toUpperCase().includes('CEARÁ') && d.etapaNum === parseInt(document.getElementById('etapaSelect').value) && mapComponente(d.componente) === mapComponente(componenteAtual)).sort((a, b) => a.edicao.localeCompare(b.edicao));
         
-        const adequadosCeara = edicoes.map(ed => {
+        const adequadosCearaTPE = edicoes.map(ed => {
             const encontrado = dadosCeara.find(d => d.edicao === ed);
             if (!encontrado) return null;
-            const { valoresCategorias } = agruparNiveis(encontrado.etapaStr, encontrado.componente, encontrado.niveis);
-            return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
+            const tpe = agruparNiveis(encontrado.etapaNum, encontrado.componente, encontrado.niveis, 'tpe');
+            return Math.round(tpe.valoresCategorias[tpe.categorias.indexOf('Adequado')] || 0);
         });
 
-        // Buscar dados do Brasil
-        const dadosBrasil = dados.filter(d => 
-            d.nome.toUpperCase().includes('BRASIL') && d.etapaStr === etapaAtual && d.componente === componenteAtual
-        ).sort((a, b) => a.edicao.localeCompare(b.edicao));
-        
-        const adequadosBrasil = edicoes.map(ed => {
-            const encontrado = dadosBrasil.find(d => d.edicao === ed);
-            if (!encontrado) return null;
-            const { valoresCategorias } = agruparNiveis(encontrado.etapaStr, encontrado.componente, encontrado.niveis);
-            return Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0));
-        });
-
-        const datasets = [{
-            label: nomeEscola,
-            data: adequadosEscola,
-            borderColor: '#196F3D',
-            backgroundColor: 'rgba(25, 111, 61, 0.1)',
-            tension: 0.25, fill: true, pointRadius: 6, pointBackgroundColor: '#196F3D', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3
-        }];
-
-        if (dadosCeara.length > 0) {
-            datasets.push({
-                label: 'Ceará (Estado)',
-                data: adequadosCeara,
-                borderColor: '#8b5cf6',
-                backgroundColor: 'rgba(139, 92, 246, 0.05)',
-                tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#8b5cf6', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [6, 4]
-            });
-        }
-
-        if (dadosBrasil.length > 0) {
-            datasets.push({
-                label: 'Brasil (Nacional)',
-                data: adequadosBrasil,
-                borderColor: '#f59e0b',
-                backgroundColor: 'rgba(245, 158, 11, 0.05)',
-                tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#f59e0b', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 2.5, borderDash: [2, 2]
-            });
-        }
-
-        graficoEvolucao = new Chart(canvas.getContext('2d'), {
+        // --- GRÁFICO 1: SOARES ---
+        graficoEvolucaoSoares = new Chart(canvasSoares.getContext('2d'), {
             type: 'line',
-            data: { labels: edicoes, datasets },
+            data: {
+                labels: edicoes,
+                datasets: [
+                    {
+                        label: 'Adequado (Soares)',
+                        data: adequadosEscolaSoares,
+                        borderColor: '#B0E57C',
+                        backgroundColor: 'rgba(176, 229, 124, 0.1)',
+                        tension: 0.25, fill: true, pointRadius: 5, borderWidth: 3
+                    },
+                    {
+                        label: 'Avançado (Soares)',
+                        data: avancadosEscolaSoares,
+                        borderColor: '#006400',
+                        backgroundColor: 'rgba(0, 100, 0, 0.1)',
+                        tension: 0.25, fill: true, pointRadius: 5, borderWidth: 3
+                    },
+                    {
+                        label: 'Adequado + Avançado (Meta TPE)',
+                        data: adequadosMaisAvancadosEscola,
+                        borderColor: '#1e3a8a',
+                        borderDash: [5, 5],
+                        tension: 0.25, fill: false, pointRadius: 6, pointBackgroundColor: '#1e3a8a', borderWidth: 3
+                    }
+                ]
+            },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'top', labels: { font: { size: 12, weight: '600' }, usePointStyle: true, pointStyle: 'circle' } },
+                    legend: { position: 'bottom', labels: { font: { size: 11, weight: '600' }, usePointStyle: true } },
                     datalabels: {
                         align: 'top', anchor: 'end',
                         color: function(context) { return context.dataset.borderColor; },
-                        font: { weight: 'bold', size: 12 },
-                        backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: 4, padding: 4,
-                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 8
+                        font: { weight: 'bold', size: 11 },
+                        backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: 4, padding: 3,
+                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 6
                     }
                 },
                 scales: {
                     y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } },
-                    x: { grid: { display: false }, ticks: { font: { size: 13, weight: '600' } } }
+                    x: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } }
+                }
+            }
+        });
+
+        // --- GRÁFICO 2: TPE ---
+        graficoEvolucaoTPE = new Chart(canvasTPE.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: edicoes,
+                datasets: [
+                    {
+                        label: nomeEscola,
+                        data: adequadosEscolaTPE,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.25, fill: true, pointRadius: 6, pointBackgroundColor: '#3b82f6', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3
+                    },
+                    {
+                        label: 'Ceará (Estado)',
+                        data: adequadosCearaTPE,
+                        borderColor: '#8b5cf6',
+                        tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#8b5cf6', borderWidth: 2.5, borderDash: [6, 4]
+                    }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { size: 11, weight: '600' }, usePointStyle: true } },
+                    datalabels: {
+                        align: 'top', anchor: 'end',
+                        color: function(context) { return context.dataset.borderColor; },
+                        font: { weight: 'bold', size: 11 },
+                        backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: 4, padding: 3,
+                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 6
+                    }
+                },
+                scales: {
+                    y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } },
+                    x: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } }
                 }
             }
         });
     }
 
-    // === NOVA ABA 4: Comparação Temporal ===
+    // === ABA 5: Comparação Temporal ===
     function renderizarComparacaoTemporal() {
         const container = document.getElementById('containerComparacao');
         container.innerHTML = '';
 
         if (dadosFiltrados.length < 2) {
-            container.innerHTML = `
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle-fill me-2"></i>
-                    É necessário ter dados de pelo menos <strong>duas edições</strong> para realizar a comparação temporal.
-                </div>
-            `;
+            container.innerHTML = `<div class="alert alert-info"><i class="bi bi-info-circle-fill me-2"></i>É necessário ter dados de pelo menos <strong>duas edições</strong> para realizar a comparação temporal.</div>`;
             return;
         }
 
-        // Ordenar cronologicamente (crescente)
         const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
-        
-        // Calcular Aprendizagem Adequada para cada edição
         const edicoesComAdequada = dadosCron.map(d => {
-            const { valoresCategorias } = agruparNiveis(d.etapaNum, d.componente, d.niveis);
+            const tpe = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'tpe');
             return {
                 edicao: d.edicao,
-                adequada: Math.round((valoresCategorias[2] || 0) + (valoresCategorias[3] || 0))
+                adequada: Math.round(tpe.valoresCategorias[tpe.categorias.indexOf('Adequado')] || 0)
             };
         });
 
-        // Calcular resumos
         let crescimentos = 0, recuos = 0, estaveis = 0;
         const comparacoes = [];
         
@@ -1377,25 +1565,19 @@
             
             let tipo, classe, seta, textoDif;
             if (diferenca > 0) {
-                tipo = 'crescimento'; classe = 'crescimento';
-                seta = '↑'; crescimentos++;
+                tipo = 'crescimento'; classe = 'crescimento'; seta = '↑'; crescimentos++;
                 textoDif = `+${diferenca.toFixed(1)} p.p.`;
             } else if (diferenca < 0) {
-                tipo = 'recuo'; classe = 'recuo';
-                seta = '↓'; recuos++;
+                tipo = 'recuo'; classe = 'recuo'; seta = '↓'; recuos++;
                 textoDif = `${diferenca.toFixed(1)} p.p.`;
             } else {
-                tipo = 'estavel'; classe = 'estavel';
-                seta = '→'; estaveis++;
+                tipo = 'estavel'; classe = 'estavel'; seta = '→'; estaveis++;
                 textoDif = `0 p.p.`;
             }
             
-            comparacoes.push({
-                anterior, atual, diferenca, tipo, classe, seta, textoDif
-            });
+            comparacoes.push({ anterior, atual, diferenca, tipo, classe, seta, textoDif });
         }
 
-        // Cards de resumo (totais)
         const resumoHtml = `
             <div class="resumo-cards">
                 <div class="resumo-card crescimento">
@@ -1421,21 +1603,13 @@
             </div>
         `;
 
-        // Comparação primeira vs última edição (destaque)
         const primeira = edicoesComAdequada[0];
         const ultima = edicoesComAdequada[edicoesComAdequada.length - 1];
         const diferencaTotal = ultima.adequada - primeira.adequada;
         let classeTotal, setaTotal, textoTotal;
-        if (diferencaTotal > 0) {
-            classeTotal = 'crescimento'; setaTotal = '↑';
-            textoTotal = `+${diferencaTotal.toFixed(1)} p.p.`;
-        } else if (diferencaTotal < 0) {
-            classeTotal = 'recuo'; setaTotal = '↓';
-            textoTotal = `${diferencaTotal.toFixed(1)} p.p.`;
-        } else {
-            classeTotal = 'estavel'; setaTotal = '→';
-            textoTotal = `0 p.p.`;
-        }
+        if (diferencaTotal > 0) { classeTotal = 'crescimento'; setaTotal = '↑'; textoTotal = `+${diferencaTotal.toFixed(1)} p.p.`; } 
+        else if (diferencaTotal < 0) { classeTotal = 'recuo'; setaTotal = '↓'; textoTotal = `${diferencaTotal.toFixed(1)} p.p.`; } 
+        else { classeTotal = 'estavel'; setaTotal = '→'; textoTotal = `0 p.p.`; }
 
         const destaqueHtml = `
             <div class="card-comparacao ${classeTotal}" style="margin-bottom: 24px; border-width: 2px;">
@@ -1467,7 +1641,6 @@
             </div>
         `;
 
-        // Grid de comparações consecutivas
         let comparacoesHtml = '<div class="comparacao-grid">';
         comparacoes.forEach(c => {
             comparacoesHtml += `
@@ -1499,55 +1672,56 @@
         container.innerHTML = resumoHtml + destaqueHtml + comparacoesHtml;
     }
 
-    // Download PNG - Distribuição
+    // Event Listeners para Downloads
     document.getElementById('btnBaixarDistribuicao').addEventListener('click', function() {
         if (!graficoDistribuicao) return;
         const inepAtual = document.getElementById('escolaSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'escola';
         const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
-        const nomeArquivo = `${nomeLimpo}_${inepAtual}_Distribuicao_Niveis_0a10.png`;
-        
-        const canvasEl = document.getElementById('graficoDistribuicao');
-        const image = canvasEl.toDataURL('image/png');
         const a = document.createElement('a');
-        a.href = image; a.download = nomeArquivo; a.click();
+        a.href = document.getElementById('graficoDistribuicao').toDataURL('image/png'); 
+        a.download = `${nomeLimpo}_${inepAtual}_Distribuicao_Niveis_0a10.png`; 
+        a.click();
     });
 
-    // Download PNG - Evolução
-    document.getElementById('btnBaixarEvolucao').addEventListener('click', function() {
-        if (!graficoEvolucao) return;
+    document.getElementById('btnBaixarEvolucaoSoares').addEventListener('click', function() {
+        if (!graficoEvolucaoSoares) return;
         const inepAtual = document.getElementById('escolaSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'escola';
         const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
-        const nomeArquivo = `${nomeLimpo}_${inepAtual}_Evolucao_SAEB.png`;
-        
-        const canvasEl = document.getElementById('graficoEvolucao');
-        const image = canvasEl.toDataURL('image/png');
         const a = document.createElement('a');
-        a.href = image; a.download = nomeArquivo; a.click();
+        a.href = document.getElementById('graficoEvolucaoSoares').toDataURL('image/png'); 
+        a.download = `${nomeLimpo}_${inepAtual}_Evolucao_Soares.png`; 
+        a.click();
     });
 
-    // Download PNG - Comparação Temporal (usa html2canvas)
+    document.getElementById('btnBaixarEvolucaoTPE').addEventListener('click', function() {
+        if (!graficoEvolucaoTPE) return;
+        const inepAtual = document.getElementById('escolaSelect').value;
+        const nomeEscola = escolasMap.get(inepAtual) || 'escola';
+        const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
+        const a = document.createElement('a');
+        a.href = document.getElementById('graficoEvolucaoTPE').toDataURL('image/png'); 
+        a.download = `${nomeLimpo}_${inepAtual}_Evolucao_TPE.png`; 
+        a.click();
+    });
+
     document.getElementById('btnBaixarComparacao').addEventListener('click', function() {
         const container = document.getElementById('containerComparacao');
         if (!container || container.children.length === 0) return;
-        
         const inepAtual = document.getElementById('escolaSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'escola';
         const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
-        const nomeArquivo = `${nomeLimpo}_${inepAtual}_Comparacao_Temporal.png`;
         
-        html2canvas(container, { 
-            backgroundColor: '#ffffff', 
-            scale: 2,
-            useCORS: true 
-        }).then(canvas => {
-            const image = canvas.toDataURL('image/png');
+        html2canvas(container, { backgroundColor: '#ffffff', scale: 2, useCORS: true }).then(canvas => {
             const a = document.createElement('a');
-            a.href = image; a.download = nomeArquivo; a.click();
+            a.href = canvas.toDataURL('image/png'); 
+            a.download = `${nomeLimpo}_${inepAtual}_Comparacao_Temporal.png`; 
+            a.click();
         });
     });
 
+    // Event Listeners para Filtros
     document.getElementById('escolaSelect').addEventListener('change', function() {
         const inep = this.value;
         if (inep) {
@@ -1574,20 +1748,18 @@
         }
     });
 
-    document.getElementById('componenteSelect').addEventListener('change', function() {
-        atualizarTudo();
-    });
+    document.getElementById('componenteSelect').addEventListener('change', atualizarTudo);
 
     // Geração de PDF
     document.getElementById('btnPDF').addEventListener('click', function() {
         const inepAtual = document.getElementById('escolaSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
-        const etapaVal = document.getElementById('etapaSelect').value;
+        const etapaVal = document.getElementById('etapaSelect').options[document.getElementById('etapaSelect').selectedIndex].text;
         const compVal = document.getElementById('componenteSelect').value;
 
         const headerBox = document.getElementById('pdfHeaderBox');
         document.getElementById('pdfEscolaNome').textContent = `Instituição / Município: ${nomeEscola}`;
-        document.getElementById('pdfDetalhesInfo').textContent = `Código INEP: ${inepAtual} | Etapa: ${etapaVal}º Ano | Componente: ${compVal}`;
+        document.getElementById('pdfDetalhesInfo').textContent = `Código INEP: ${inepAtual} | Etapa: ${etapaVal} | Componente: ${compVal}`;
         headerBox.style.display = 'block';
 
         const content = document.getElementById('mainContent');
