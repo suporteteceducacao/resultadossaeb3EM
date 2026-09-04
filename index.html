@@ -1468,7 +1468,7 @@
         // Dados do Ceará
         const etapaNumFiltro = parseInt(document.getElementById('etapaSelect').value);
         const dadosCeara = dados.filter(d => 
-            d.nome.toUpperCase().includes('CEARÁ') && 
+            d.nome.toUpperCase().includes('CEARA') && 
             d.etapaNum === etapaNumFiltro && 
             mapComponente(d.componente) === mapComponente(componenteAtual)
         ).sort((a, b) => a.edicao.localeCompare(b.edicao));
