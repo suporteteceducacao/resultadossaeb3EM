@@ -23,7 +23,6 @@
         :root {
             --cor-primaria: #1e3a8a;
             --cor-primaria-light: #3b82f6;
-            --cor-secundaria: #f59e0b;
             --cor-fundo: #f8fafc;
             --cor-card: #ffffff;
             --cor-texto: #1e293b;
@@ -33,16 +32,16 @@
             --cor-perigo: #ef4444;
             --cor-info: #3b82f6;
             
-            /* Cores dos níveis (Soares - 4 níveis) */
-            --nivel-abaixo: #FF4136;
-            --nivel-basico: #FF851B;
-            --nivel-proficiente: #B0E57C;
-            --nivel-avancado: #006400;
+            /* Cores dos níveis (Soares - 4 níveis) - TONS MAIS ESCUROS E NÍTIDOS */
+            --nivel-abaixo: #dc2626;      /* Vermelho Escuro */
+            --nivel-basico: #ea580c;      /* Laranja Escuro */
+            --nivel-proficiente: #16a34a; /* Verde Médio/Escuro */
+            --nivel-avancado: #14532d;    /* Verde Profundo */
             
-            /* Cor específica para Adequado TPE (agregado) */
-            --nivel-tpe-adequado: #3b82f6;
+            /* Cor específica para Adequado TPE (agregado) - VERDE ESCURO */
+            --nivel-tpe-adequado: #166534; 
             
-            --cor-maracanau: #8b5cf6;
+            --cor-maracanau: #7e22ce; /* Roxo para destaque de meta/ceará */
         }
         
         * { box-sizing: border-box; }
@@ -506,6 +505,22 @@
             border: 1px solid rgba(0,0,0,0.1);
         }
         
+        .secao-comparativa {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid var(--cor-borda);
+        }
+        
+        .secao-comparativa h5 {
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         @media (max-width: 768px) {
             .main-content { padding: 20px 16px; }
             .page-title { font-size: 1.6rem; }
@@ -577,7 +592,7 @@
                     <span>Avançado</span>
                 </div>
                 <div class="mt-2 pt-2 border-top text-muted" style="font-size: 0.75rem;">
-                    <em>Nota: Na classificação "Todos Pela Educação", as categorias "Adequado" e "Avançado" são agregadas em uma única categoria "Adequado".</em>
+                    <em>Nota: Na classificação "Todos Pela Educação", as categorias "Adequado" e "Avançado" são agregadas em uma única categoria "Adequado" (representada em Verde-Escuro).</em>
                 </div>
             </div>
         </div>
@@ -672,7 +687,7 @@
                 <div class="tab-pane fade" id="evolucao" role="tabpanel">
                     <div class="info-box comparativo mb-3">
                         <i class="bi bi-info-circle-fill me-2"></i>
-                        <strong>Nota Metodológica:</strong> O gráfico da esquerda mostra a divisão em 4 níveis (Soares, 2009), destacando "Adequado" e "Avançado" separadamente, além da soma "Adequado + Avançado" para fins de comparação. O gráfico da direita mostra a classificação agregada de 3 níveis (Todos Pela Educação), onde "Adequado" engloba a soma das duas categorias anteriores.
+                        <strong>Nota Metodológica:</strong> O gráfico da esquerda mostra a divisão em 4 níveis (Soares, 2009), com cores escuras para evitar sobreposição visual. O gráfico da direita mostra a classificação agregada de 3 níveis (Todos Pela Educação), incluindo o comparativo com o Estado do Ceará.
                     </div>
                     
                     <div class="row g-4">
@@ -681,10 +696,10 @@
                             <div class="card-edicao h-100">
                                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                                     <div>
-                                        <h6 class="mb-1 fw-bold text-primary">
-                                            <i class="bi bi-graph-up-arrow me-1"></i> Evolução (Soares 2009)
+                                        <h6 class="mb-1 fw-bold text-dark">
+                                            <i class="bi bi-graph-up-arrow me-1" style="color: var(--nivel-avancado);"></i> Evolução (Soares 2009)
                                         </h6>
-                                        <small class="text-muted">Adequado, Avançado e Soma (Meta)</small>
+                                        <small class="text-muted">Adequado, Avançado e Meta (Soma)</small>
                                     </div>
                                     <button id="btnBaixarEvolucaoSoares" class="btn btn-outline-success btn-sm fw-semibold">
                                         <i class="bi bi-download"></i> PNG
@@ -704,7 +719,7 @@
                                         <h6 class="mb-1 fw-bold" style="color: var(--nivel-tpe-adequado);">
                                             <i class="bi bi-graph-up-arrow me-1"></i> Evolução (Todos pela Educação)
                                         </h6>
-                                        <small class="text-muted">Aprendizagem Adequada (Agregada)</small>
+                                        <small class="text-muted">Aprendizagem Adequada (Agregada) vs. Ceará</small>
                                     </div>
                                     <button id="btnBaixarEvolucaoTPE" class="btn btn-outline-success btn-sm fw-semibold">
                                         <i class="bi bi-download"></i> PNG
@@ -718,23 +733,39 @@
                     </div>
                 </div>
 
-                <!-- Aba 5: Comparação Temporal -->
+                <!-- Aba 5: Comparação Temporal (DUPLA) -->
                 <div class="tab-pane fade" id="comparacao" role="tabpanel">
                     <div class="card-edicao">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                             <div>
                                 <h5 class="mb-1 fw-bold">
                                     <i class="bi bi-arrow-left-right text-primary me-2"></i>
-                                    Comparação Temporal da Aprendizagem Adequada (TPE)
+                                    Comparação Temporal de Aprendizagem
                                 </h5>
-                                <small class="text-muted">Análise de crescimento, recuo ou estabilidade entre edições consecutivas (baseado na meta agregada)</small>
+                                <small class="text-muted">Análise de crescimento, recuo ou estabilidade entre edições consecutivas sob duas óticas metodológicas.</small>
                             </div>
                             <button id="btnBaixarComparacao" class="btn btn-outline-success fw-semibold">
                                 <i class="bi bi-download"></i> Baixar Comparação PNG
                             </button>
                         </div>
                         
-                        <div id="containerComparacao"></div>
+                        <!-- Seção Soares -->
+                        <div class="secao-comparativa">
+                            <h5 style="color: var(--nivel-avancado);">
+                                <i class="bi bi-people-fill"></i> Metodologia Soares (2009) 
+                                <span class="badge bg-dark ms-2" style="font-size: 0.7rem;">Meta: Adequado + Avançado</span>
+                            </h5>
+                            <div id="containerComparacaoSoares"></div>
+                        </div>
+
+                        <!-- Seção TPE -->
+                        <div class="secao-comparativa" style="border-left: 4px solid var(--nivel-tpe-adequado);">
+                            <h5 style="color: var(--nivel-tpe-adequado);">
+                                <i class="bi bi-building"></i> Metodologia Todos Pela Educação 
+                                <span class="badge ms-2" style="font-size: 0.7rem; background-color: var(--nivel-tpe-adequado); color: white;">Meta: Adequado (Agregado)</span>
+                            </h5>
+                            <div id="containerComparacaoTPE"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -786,7 +817,7 @@
         5: 'black', 6: 'black', 7: 'black', 8: 'white', 9: 'white', 10: 'white'
     };
 
-    // MATRIZ DE MAPEAMENTO SAEB -> CLASSIFICAÇÕES (Conforme documentação técnica fornecida)
+    // MATRIZ DE MAPEAMENTO SAEB -> CLASSIFICAÇÕES
     const MAPEAMENTO_SAEB = {
         '5_LP': {
             soares: { 'Abaixo do Básico': [0,1], 'Básico': [2,3], 'Adequado': [4,5], 'Avançado': [6,7,8,9] },
@@ -814,19 +845,20 @@
         }
     };
 
+    // CORES ATUALIZADAS: Tons mais escuros e nítidos para evitar sobreposição visual
     const CORES_CATEGORIAS = {
-        'Abaixo do Básico': '#FF4136',
-        'Básico': '#FF851B',
-        'Adequado': '#B0E57C',
-        'Avançado': '#006400',
-        'Adequado (TPE)': '#3b82f6',
-        'Adequado + Avançado': '#059669' // Verde mais escuro para a soma no gráfico de evolução
+        'Abaixo do Básico': '#dc2626',      // Vermelho Escuro
+        'Básico': '#ea580c',                // Laranja Escuro
+        'Adequado': '#16a34a',              // Verde Médio/Escuro
+        'Avançado': '#14532d',              // Verde Profundo
+        'Adequado (TPE)': '#166534',        // Verde Escuro (Solicitação)
+        'Adequado + Avançado': '#7e22ce'    // Roxo (Para destacar a meta combinada)
     };
 
     const TEXTOS_CATEGORIAS = {
         'Abaixo do Básico': 'white',
-        'Básico': 'black',
-        'Adequado': 'black',
+        'Básico': 'white',
+        'Adequado': 'white',
         'Avançado': 'white',
         'Adequado (TPE)': 'white',
         'Adequado + Avançado': 'white'
@@ -861,14 +893,12 @@
         return nomeCompleto;
     }
 
-    // NOVA LÓGICA DE AGRUPAMENTO UNIFICADA
     function agruparNiveis(etapaNum, componente, valores, metodologia) {
         const comp = mapComponente(componente);
         const chave = `${etapaNum}_${comp}`;
         const mapeamento = MAPEAMENTO_SAEB[chave];
         
         if (!mapeamento) {
-            // Fallback genérico se a combinação não estiver na matriz
             return { categorias: ['Desconhecido'], valoresCategorias: [100], cores: ['#ccc'], textColors: ['black'] };
         }
 
@@ -884,7 +914,6 @@
             categorias.push(cat);
             valoresCategorias.push(soma);
             
-            // Ajuste de cor para TPE
             let corChave = cat;
             if (metodologia === 'tpe' && cat === 'Adequado') corChave = 'Adequado (TPE)';
             
@@ -896,10 +925,10 @@
     }
 
     function corCardPorPercentual(pct) {
-        if (pct <= 25) return { bg: "#FF4136", text: "white" };
-        if (pct <= 50) return { bg: "#FF851B", text: "black" };
-        if (pct <= 75) return { bg: "#B0E57C", text: "black" };
-        return { bg: "#006400", text: "white" };
+        if (pct <= 25) return { bg: "#dc2626", text: "white" };
+        if (pct <= 50) return { bg: "#ea580c", text: "white" };
+        if (pct <= 75) return { bg: "#16a34a", text: "white" };
+        return { bg: "#14532d", text: "white" };
     }
 
     function carregarArquivoLocal() {
@@ -1097,7 +1126,6 @@
         dadosFiltrados.forEach((d, idx) => {
             const { categorias, valoresCategorias, cores, textColors } = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'soares');
             
-            // Para Soares, "Adequado" é apenas a categoria específica, mas podemos mostrar Adequado + Avançado como destaque
             const adequado = valoresCategorias[categorias.indexOf('Adequado')] || 0;
             const avancado = valoresCategorias[categorias.indexOf('Avançado')] || 0;
             const adequadoTotal = Math.round(adequado + avancado);
@@ -1231,7 +1259,8 @@
             
             const title = document.createElement('h5');
             title.className = 'm-0 fw-bold';
-            title.innerHTML = `<i class="bi bi-calendar-event me-2" style="color:var(--nivel-tpe-adequado)"></i>Edição: ${d.edicao}`;
+            // COR ALTERADA PARA VERDE ESCURO CONFORME SOLICITADO
+            title.innerHTML = `<i class="bi bi-calendar-event me-2" style="color: var(--nivel-tpe-adequado)"></i>Edição: ${d.edicao}`;
             headerDiv.appendChild(title);
 
             const btnDownload = document.createElement('button');
@@ -1319,7 +1348,7 @@
         });
     }
 
-    // === ABA 3: Distribuição por Níveis (BARRAS AGRUPADAS 0-10) ===
+    // === ABA 3: Distribuição por Níveis ===
     function renderizarDistribuicao() {
         if (graficoDistribuicao) {
             graficoDistribuicao.destroy();
@@ -1410,7 +1439,6 @@
         if (!canvasSoares || !canvasTPE || dadosFiltrados.length === 0) return;
 
         const inepAtual = document.getElementById('escolaSelect').value;
-        const etapaAtual = document.getElementById('etapaSelect').options[document.getElementById('etapaSelect').selectedIndex].text;
         const componenteAtual = document.getElementById('componenteSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'Escola';
         
@@ -1437,8 +1465,13 @@
             adequadosEscolaTPE.push(Math.round(adeqT));
         });
 
-        // Dados do Ceará (Filtro aproximado por nome)
-        const dadosCeara = dados.filter(d => d.nome.toUpperCase().includes('CEARÁ') && d.etapaNum === parseInt(document.getElementById('etapaSelect').value) && mapComponente(d.componente) === mapComponente(componenteAtual)).sort((a, b) => a.edicao.localeCompare(b.edicao));
+        // Dados do Ceará
+        const etapaNumFiltro = parseInt(document.getElementById('etapaSelect').value);
+        const dadosCeara = dados.filter(d => 
+            d.nome.toUpperCase().includes('CEARÁ') && 
+            d.etapaNum === etapaNumFiltro && 
+            mapComponente(d.componente) === mapComponente(componenteAtual)
+        ).sort((a, b) => a.edicao.localeCompare(b.edicao));
         
         const adequadosCearaTPE = edicoes.map(ed => {
             const encontrado = dadosCeara.find(d => d.edicao === ed);
@@ -1447,55 +1480,60 @@
             return Math.round(tpe.valoresCategorias[tpe.categorias.indexOf('Adequado')] || 0);
         });
 
-        // --- GRÁFICO 1: SOARES ---
+        // --- GRÁFICO 1: SOARES (Cores escuras, sem sobreposição, texto nítido) ---
         graficoEvolucaoSoares = new Chart(canvasSoares.getContext('2d'), {
             type: 'line',
             data: {
                 labels: edicoes,
                 datasets: [
                     {
-                        label: 'Adequado (Soares)',
+                        label: 'Adequado',
                         data: adequadosEscolaSoares,
-                        borderColor: '#B0E57C',
-                        backgroundColor: 'rgba(176, 229, 124, 0.1)',
-                        tension: 0.25, fill: true, pointRadius: 5, borderWidth: 3
+                        borderColor: '#16a34a', // Verde Médio/Escuro
+                        backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                        tension: 0.2, // Reduzido para evitar curvas exageradas e sobreposição
+                        fill: true, pointRadius: 6, pointBackgroundColor: '#16a34a', borderWidth: 3
                     },
                     {
-                        label: 'Avançado (Soares)',
+                        label: 'Avançado',
                         data: avancadosEscolaSoares,
-                        borderColor: '#006400',
-                        backgroundColor: 'rgba(0, 100, 0, 0.1)',
-                        tension: 0.25, fill: true, pointRadius: 5, borderWidth: 3
+                        borderColor: '#14532d', // Verde Profundo
+                        backgroundColor: 'rgba(20, 83, 45, 0.1)',
+                        tension: 0.2,
+                        fill: true, pointRadius: 6, pointBackgroundColor: '#14532d', borderWidth: 3
                     },
                     {
-                        label: 'Adequado + Avançado (Meta TPE)',
+                        label: 'Adequado + Avançado (Meta)',
                         data: adequadosMaisAvancadosEscola,
-                        borderColor: '#1e3a8a',
-                        borderDash: [5, 5],
-                        tension: 0.25, fill: false, pointRadius: 6, pointBackgroundColor: '#1e3a8a', borderWidth: 3
+                        borderColor: '#7e22ce', // Roxo vibrante para contraste máximo
+                        borderDash: [8, 4],
+                        tension: 0.1, // Quase reto para clareza da meta
+                        fill: false, pointRadius: 7, pointBackgroundColor: '#7e22ce', pointBorderColor: '#fff', pointBorderWidth: 2, borderWidth: 4
                     }
                 ]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom', labels: { font: { size: 11, weight: '600' }, usePointStyle: true } },
+                    legend: { position: 'bottom', labels: { font: { size: 11, weight: '700' }, usePointStyle: true, padding: 15 } },
                     datalabels: {
-                        align: 'top', anchor: 'end',
+                        align: 'end', anchor: 'end', clamp: true,
                         color: function(context) { return context.dataset.borderColor; },
-                        font: { weight: 'bold', size: 11 },
-                        backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: 4, padding: 3,
-                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 6
+                        font: { weight: '800', size: 11 },
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                        borderRadius: 4, padding: 4, borderWidth: 1, borderColor: context => context.dataset.borderColor,
+                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, 
+                        offset: 8
                     }
                 },
                 scales: {
-                    y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } },
-                    x: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } }
+                    y: { min: 0, max: 100, ticks: { callback: v => v + '%', font: {weight: '600'} }, grid: { color: '#e2e8f0' } },
+                    x: { grid: { display: false }, ticks: { font: { size: 12, weight: '700' } } }
                 }
             }
         });
 
-        // --- GRÁFICO 2: TPE ---
+        // --- GRÁFICO 2: TPE (Escola vs Ceará) ---
         graficoEvolucaoTPE = new Chart(canvasTPE.getContext('2d'), {
             type: 'line',
             data: {
@@ -1504,172 +1542,185 @@
                     {
                         label: nomeEscola,
                         data: adequadosEscolaTPE,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        tension: 0.25, fill: true, pointRadius: 6, pointBackgroundColor: '#3b82f6', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3
+                        borderColor: '#166534', // Verde Escuro (Solicitação)
+                        backgroundColor: 'rgba(22, 101, 52, 0.1)',
+                        tension: 0.25, fill: true, pointRadius: 6, pointBackgroundColor: '#166534', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3
                     },
                     {
                         label: 'Ceará (Estado)',
                         data: adequadosCearaTPE,
-                        borderColor: '#8b5cf6',
-                        tension: 0.25, fill: false, pointRadius: 5, pointBackgroundColor: '#8b5cf6', borderWidth: 2.5, borderDash: [6, 4]
+                        borderColor: '#7e22ce', // Roxo para contraste nítido com o verde
+                        backgroundColor: 'rgba(126, 34, 206, 0.05)',
+                        tension: 0.25, fill: false, pointRadius: 6, pointBackgroundColor: '#7e22ce', pointBorderWidth: 2, pointBorderColor: '#ffffff', borderWidth: 3, borderDash: [6, 4]
                     }
                 ]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom', labels: { font: { size: 11, weight: '600' }, usePointStyle: true } },
+                    legend: { position: 'bottom', labels: { font: { size: 11, weight: '700' }, usePointStyle: true, padding: 15 } },
                     datalabels: {
-                        align: 'top', anchor: 'end',
+                        align: 'end', anchor: 'end', clamp: true,
                         color: function(context) { return context.dataset.borderColor; },
-                        font: { weight: 'bold', size: 11 },
-                        backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: 4, padding: 3,
-                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 6
+                        font: { weight: '800', size: 11 },
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                        borderRadius: 4, padding: 4, borderWidth: 1, borderColor: context => context.dataset.borderColor,
+                        formatter: function(value) { return value !== null ? `${value}%` : ''; }, offset: 8
                     }
                 },
                 scales: {
-                    y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } },
-                    x: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } }
+                    y: { min: 0, max: 100, ticks: { callback: v => v + '%', font: {weight: '600'} }, grid: { color: '#e2e8f0' } },
+                    x: { grid: { display: false }, ticks: { font: { size: 12, weight: '700' } } }
                 }
             }
         });
     }
 
-    // === ABA 5: Comparação Temporal ===
+    // === ABA 5: Comparação Temporal (DUPLA: Soares e TPE) ===
     function renderizarComparacaoTemporal() {
-        const container = document.getElementById('containerComparacao');
-        container.innerHTML = '';
+        const containerSoares = document.getElementById('containerComparacaoSoares');
+        const containerTPE = document.getElementById('containerComparacaoTPE');
+        containerSoares.innerHTML = '';
+        containerTPE.innerHTML = '';
 
         if (dadosFiltrados.length < 2) {
-            container.innerHTML = `<div class="alert alert-info"><i class="bi bi-info-circle-fill me-2"></i>É necessário ter dados de pelo menos <strong>duas edições</strong> para realizar a comparação temporal.</div>`;
+            const msg = `<div class="alert alert-info"><i class="bi bi-info-circle-fill me-2"></i>É necessário ter dados de pelo menos <strong>duas edições</strong> para realizar a comparação temporal.</div>`;
+            containerSoares.innerHTML = msg;
+            containerTPE.innerHTML = msg;
             return;
         }
 
         const dadosCron = [...dadosFiltrados].sort((a, b) => a.edicao.localeCompare(b.edicao));
-        const edicoesComAdequada = dadosCron.map(d => {
+        
+        // Calcular métricas para cada edição
+        const edicoesComMetricas = dadosCron.map(d => {
+            const soares = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'soares');
             const tpe = agruparNiveis(d.etapaNum, d.componente, d.niveis, 'tpe');
+            
+            const adeqS = soares.valoresCategorias[soares.categorias.indexOf('Adequado')] || 0;
+            const avanS = soares.valoresCategorias[soares.categorias.indexOf('Avançado')] || 0;
+            
             return {
                 edicao: d.edicao,
-                adequada: Math.round(tpe.valoresCategorias[tpe.categorias.indexOf('Adequado')] || 0)
+                metaSoares: Math.round(adeqS + avanS),
+                metaTPE: Math.round(tpe.valoresCategorias[tpe.categorias.indexOf('Adequado')] || 0)
             };
         });
 
-        let crescimentos = 0, recuos = 0, estaveis = 0;
-        const comparacoes = [];
-        
-        for (let i = 1; i < edicoesComAdequada.length; i++) {
-            const anterior = edicoesComAdequada[i-1];
-            const atual = edicoesComAdequada[i];
-            const diferenca = atual.adequada - anterior.adequada;
+        // Função auxiliar para gerar os cards de comparação
+        function gerarGridComparacao(dados, chaveValor, tituloMetodologia) {
+            let crescimentos = 0, recuos = 0, estaveis = 0;
+            const comparacoes = [];
             
-            let tipo, classe, seta, textoDif;
-            if (diferenca > 0) {
-                tipo = 'crescimento'; classe = 'crescimento'; seta = '↑'; crescimentos++;
-                textoDif = `+${diferenca.toFixed(1)} p.p.`;
-            } else if (diferenca < 0) {
-                tipo = 'recuo'; classe = 'recuo'; seta = '↓'; recuos++;
-                textoDif = `${diferenca.toFixed(1)} p.p.`;
-            } else {
-                tipo = 'estavel'; classe = 'estavel'; seta = '→'; estaveis++;
-                textoDif = `0 p.p.`;
+            for (let i = 1; i < dados.length; i++) {
+                const anterior = dados[i-1];
+                const atual = dados[i];
+                const diferenca = atual[chaveValor] - anterior[chaveValor];
+                
+                let tipo, classe, seta, textoDif;
+                if (diferenca > 0) {
+                    tipo = 'crescimento'; classe = 'crescimento'; seta = '↑'; crescimentos++;
+                    textoDif = `+${diferenca.toFixed(1)} p.p.`;
+                } else if (diferenca < 0) {
+                    tipo = 'recuo'; classe = 'recuo'; seta = '↓'; recuos++;
+                    textoDif = `${diferenca.toFixed(1)} p.p.`;
+                } else {
+                    tipo = 'estavel'; classe = 'estavel'; seta = '→'; estaveis++;
+                    textoDif = `0 p.p.`;
+                }
+                
+                comparacoes.push({ anterior, atual, diferenca, tipo, classe, seta, textoDif });
             }
-            
-            comparacoes.push({ anterior, atual, diferenca, tipo, classe, seta, textoDif });
-        }
 
-        const resumoHtml = `
-            <div class="resumo-cards">
-                <div class="resumo-card crescimento">
-                    <div class="icon-big"><i class="bi bi-graph-up-arrow"></i></div>
-                    <div class="numero">${crescimentos}</div>
-                    <div class="label">Crescimentos</div>
-                </div>
-                <div class="resumo-card recuo">
-                    <div class="icon-big"><i class="bi bi-graph-down-arrow"></i></div>
-                    <div class="numero">${recuos}</div>
-                    <div class="label">Recuos</div>
-                </div>
-                <div class="resumo-card estavel">
-                    <div class="icon-big"><i class="bi bi-dash-square"></i></div>
-                    <div class="numero">${estaveis}</div>
-                    <div class="label">Estáveis</div>
-                </div>
-                <div class="resumo-card" style="border-left: 4px solid var(--cor-primaria);">
-                    <div class="icon-big" style="color: var(--cor-primaria);"><i class="bi bi-calendar-range"></i></div>
-                    <div class="numero">${edicoesComAdequada.length}</div>
-                    <div class="label">Edições Analisadas</div>
-                </div>
-            </div>
-        `;
+            const primeira = dados[0];
+            const ultima = dados[dados.length - 1];
+            const diferencaTotal = ultima[chaveValor] - primeira[chaveValor];
+            let classeTotal, setaTotal, textoTotal;
+            if (diferencaTotal > 0) { classeTotal = 'crescimento'; setaTotal = '↑'; textoTotal = `+${diferencaTotal.toFixed(1)} p.p.`; } 
+            else if (diferencaTotal < 0) { classeTotal = 'recuo'; setaTotal = '↓'; textoTotal = `${diferencaTotal.toFixed(1)} p.p.`; } 
+            else { classeTotal = 'estavel'; setaTotal = '→'; textoTotal = `0 p.p.`; }
 
-        const primeira = edicoesComAdequada[0];
-        const ultima = edicoesComAdequada[edicoesComAdequada.length - 1];
-        const diferencaTotal = ultima.adequada - primeira.adequada;
-        let classeTotal, setaTotal, textoTotal;
-        if (diferencaTotal > 0) { classeTotal = 'crescimento'; setaTotal = '↑'; textoTotal = `+${diferencaTotal.toFixed(1)} p.p.`; } 
-        else if (diferencaTotal < 0) { classeTotal = 'recuo'; setaTotal = '↓'; textoTotal = `${diferencaTotal.toFixed(1)} p.p.`; } 
-        else { classeTotal = 'estavel'; setaTotal = '→'; textoTotal = `0 p.p.`; }
-
-        const destaqueHtml = `
-            <div class="card-comparacao ${classeTotal}" style="margin-bottom: 24px; border-width: 2px;">
-                <div class="position-absolute top-0 end-0 m-2">
-                    <span class="badge bg-warning text-dark"><i class="bi bi-star-fill"></i> Visão Geral</span>
-                </div>
-                <div style="text-align:center; margin-bottom:10px;">
-                    <small class="text-uppercase fw-bold text-muted">Comparação ${primeira.edicao} → ${ultima.edicao}</small>
-                </div>
-                <div class="periodo">
-                    <div class="edicao-box">${primeira.edicao}</div>
-                    <div class="seta-icon">${setaTotal}</div>
-                    <div class="edicao-box">${ultima.edicao}</div>
-                </div>
-                <div class="valores-row">
-                    <div class="valor-item">
-                        <div class="label">Inicial</div>
-                        <div class="numero">${primeira.adequada}%</div>
+            let html = `
+                <div class="resumo-cards mb-4">
+                    <div class="resumo-card crescimento">
+                        <div class="icon-big"><i class="bi bi-graph-up-arrow"></i></div>
+                        <div class="numero">${crescimentos}</div>
+                        <div class="label">Crescimentos</div>
                     </div>
-                    <div class="valor-item">
-                        <div class="label">Final</div>
-                        <div class="numero">${ultima.adequada}%</div>
+                    <div class="resumo-card recuo">
+                        <div class="icon-big"><i class="bi bi-graph-down-arrow"></i></div>
+                        <div class="numero">${recuos}</div>
+                        <div class="label">Recuos</div>
+                    </div>
+                    <div class="resumo-card estavel">
+                        <div class="icon-big"><i class="bi bi-dash-square"></i></div>
+                        <div class="numero">${estaveis}</div>
+                        <div class="label">Estáveis</div>
                     </div>
                 </div>
-                <div class="diferenca-badge">
-                    <i class="bi ${diferencaTotal > 0 ? 'bi-arrow-up-right-circle-fill' : diferencaTotal < 0 ? 'bi-arrow-down-right-circle-fill' : 'bi-dash-circle-fill'}"></i>
-                    <span>Diferença Total: <strong>${textoTotal}</strong></span>
-                </div>
-            </div>
-        `;
 
-        let comparacoesHtml = '<div class="comparacao-grid">';
-        comparacoes.forEach(c => {
-            comparacoesHtml += `
-                <div class="card-comparacao ${c.classe}">
+                <div class="card-comparacao ${classeTotal}" style="margin-bottom: 24px; border-width: 2px;">
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-dark"><i class="bi bi-star-fill"></i> Visão Geral</span>
+                    </div>
+                    <div style="text-align:center; margin-bottom:10px;">
+                        <small class="text-uppercase fw-bold text-muted">Comparação ${primeira.edicao} → ${ultima.edicao}</small>
+                    </div>
                     <div class="periodo">
-                        <div class="edicao-box">${c.anterior.edicao}</div>
-                        <div class="seta-icon">${c.seta}</div>
-                        <div class="edicao-box">${c.atual.edicao}</div>
+                        <div class="edicao-box">${primeira.edicao}</div>
+                        <div class="seta-icon">${setaTotal}</div>
+                        <div class="edicao-box">${ultima.edicao}</div>
                     </div>
                     <div class="valores-row">
                         <div class="valor-item">
-                            <div class="label">Anterior</div>
-                            <div class="numero">${c.anterior.adequada}%</div>
+                            <div class="label">Inicial</div>
+                            <div class="numero">${primeira[chaveValor]}%</div>
                         </div>
                         <div class="valor-item">
-                            <div class="label">Seguinte</div>
-                            <div class="numero">${c.atual.adequada}%</div>
+                            <div class="label">Final</div>
+                            <div class="numero">${ultima[chaveValor]}%</div>
                         </div>
                     </div>
                     <div class="diferenca-badge">
-                        <i class="bi ${c.diferenca > 0 ? 'bi-arrow-up-right-circle-fill' : c.diferenca < 0 ? 'bi-arrow-down-right-circle-fill' : 'bi-dash-circle-fill'}"></i>
-                        <span><strong>${c.textoDif}</strong></span>
+                        <i class="bi ${diferencaTotal > 0 ? 'bi-arrow-up-right-circle-fill' : diferencaTotal < 0 ? 'bi-arrow-down-right-circle-fill' : 'bi-dash-circle-fill'}"></i>
+                        <span>Diferença Total: <strong>${textoTotal}</strong></span>
                     </div>
                 </div>
-            `;
-        });
-        comparacoesHtml += '</div>';
 
-        container.innerHTML = resumoHtml + destaqueHtml + comparacoesHtml;
+                <div class="comparacao-grid">
+            `;
+
+            comparacoes.forEach(c => {
+                html += `
+                    <div class="card-comparacao ${c.classe}">
+                        <div class="periodo">
+                            <div class="edicao-box">${c.anterior.edicao}</div>
+                            <div class="seta-icon">${c.seta}</div>
+                            <div class="edicao-box">${c.atual.edicao}</div>
+                        </div>
+                        <div class="valores-row">
+                            <div class="valor-item">
+                                <div class="label">Anterior</div>
+                                <div class="numero">${c.anterior[chaveValor]}%</div>
+                            </div>
+                            <div class="valor-item">
+                                <div class="label">Seguinte</div>
+                                <div class="numero">${c.atual[chaveValor]}%</div>
+                            </div>
+                        </div>
+                        <div class="diferenca-badge">
+                            <i class="bi ${c.diferenca > 0 ? 'bi-arrow-up-right-circle-fill' : c.diferenca < 0 ? 'bi-arrow-down-right-circle-fill' : 'bi-dash-circle-fill'}"></i>
+                            <span><strong>${c.textoDif}</strong></span>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        containerSoares.innerHTML = gerarGridComparacao(edicoesComMetricas, 'metaSoares', 'Soares');
+        containerTPE.innerHTML = gerarGridComparacao(edicoesComMetricas, 'metaTPE', 'TPE');
     }
 
     // Event Listeners para Downloads
@@ -1707,8 +1758,8 @@
     });
 
     document.getElementById('btnBaixarComparacao').addEventListener('click', function() {
-        const container = document.getElementById('containerComparacao');
-        if (!container || container.children.length === 0) return;
+        const container = document.getElementById('comparacao'); // Captura a aba inteira para ter os dois
+        if (!container) return;
         const inepAtual = document.getElementById('escolaSelect').value;
         const nomeEscola = escolasMap.get(inepAtual) || 'escola';
         const nomeLimpo = nomeEscola.replace(/[^a-zA-Z0-9]/g, '_');
@@ -1716,7 +1767,7 @@
         html2canvas(container, { backgroundColor: '#ffffff', scale: 2, useCORS: true }).then(canvas => {
             const a = document.createElement('a');
             a.href = canvas.toDataURL('image/png'); 
-            a.download = `${nomeLimpo}_${inepAtual}_Comparacao_Temporal.png`; 
+            a.download = `${nomeLimpo}_${inepAtual}_Comparacao_Temporal_Dupla.png`; 
             a.click();
         });
     });
